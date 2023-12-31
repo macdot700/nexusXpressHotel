@@ -1,0 +1,1 @@
+After clonning, run "npm install" on your command line then to start app run "npm run dev" 
