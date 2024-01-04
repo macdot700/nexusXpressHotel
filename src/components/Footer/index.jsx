@@ -22,7 +22,7 @@ const Footer = () => {
                 <img
                   src={Logo}
                   alt="nexus hotel"
-                  className="mix-blend-"
+                  className="mix-blend-plus-lighter"
                   width={100}
                   height={40}
                 />
@@ -33,7 +33,7 @@ const Footer = () => {
                 </p>
               </div>
             </div>
-            <ul className="flex flex-col justify-between items-center">
+            <ul className="flex flex-col justify-between items-start md:items-center">
               {navLinks.map((navItem, idx) => (
                 <NavLink key={idx} to={navItem.href}>
                   {navItem.label}

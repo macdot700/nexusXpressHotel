@@ -104,7 +104,7 @@ const Navbar = () => {
               </div>
               <ul className="lg:hidden flex flex-col gap-6 items-center justify-center h-full">
                 {navLinks.map((item) => (
-              <li key={item.label}>
+              <li key={item.label} onClick={() => setIsMenuOpen(false)}>
               <NavLink
                 className={({ isActive }) =>
                   isActive
