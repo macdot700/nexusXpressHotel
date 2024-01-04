@@ -4,8 +4,15 @@ import { NavLink } from "react-router-dom";
 import Hamburger from "../Icons/Hamburger";
 import NavClose from "../Icons/NavClose";
 import Logo from "../../assets/images/logo.jpg";
-import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
-import { faMobileScreen } from "@fortawesome/free-solid-svg-icons";
+import email from "../../assets/images/email.png";
+import phone from "../../assets/images/phone.png";
+
+export const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/about-us", label: "About Us" },
+  { href: "/accommodation", label: "Accommodation" },
+  { href: "/contact-us", label: "Contact Us" },
+];
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,20 +25,14 @@ const Navbar = () => {
       setFixedNav(false);
     }
   });
-  const navLinks = [
-    { href: "/", label: "Home" },
-    { href: "/about-us", label: "About Us" },
-    { href: "/accommodation", label: "Accommodation" },
-    // { href: "/category", label: "Categories" },
-    { href: "/contact-us", label: "Contact Us" },
-  ];
+
   const fixedNavLinks = navLinks.toSpliced(2, 0, {
     href: "/",
     label: <img src={Logo} alt="nexus hotel" width={50} height={20} />,
   });
   return (
     <>
-      <div className="bg-[#1a283f] text-white">
+      <div className="bg-blue-1 text-white">
         <div className="z-10 w-full px-4 max-w-[1200px] m-auto">
           <div className="text-sm grid grid-cols-2 lg:grid-cols-3 justify-between items-center py-5">
             <div className="flex flex-col gap-1.5">
@@ -45,22 +46,22 @@ const Navbar = () => {
             <div className="flex flex-col justify-center items-end gap-1.5">
               <a
                 href="tel:+234 806 779 2621"
-                className="flex gap-1 items-center"
+                className="flex gap-4 items-center"
               >
-                <FontAwesomeIcon icon={faMobileScreen} />{" "}
+                  <img src={phone} width="15" height="15" />
                 <span>+234 806 779 2621</span>
               </a>
               <a
                 href="mailto:nexusxpresshotel@gmail.com"
-                className="flex gap-1 items-center"
+                className="flex gap-4 items-center"
               >
-                <FontAwesomeIcon icon={faEnvelope} />{" "}
+                <img src={email} width="15" height="15" />
                 <span className="hidden lg:inline">nexusxpresshotel@gmail.com</span>
                 <span className="inline lg:hidden">Send us a mail</span>
               </a>
             </div>
           </div>
-          <div className="text-xs bg-[#1a283f] z-30 h-[40px] w-full">
+          <div className="text-xs bg-blue-1 z-30 h-[40px] w-full">
             <nav className="flex justify-center items-center">
               <ul className="max-w-[600px] flex-1 flex justify-between items-center max-lg:hidden font-semibold">
                 {navLinks.map((item) => (

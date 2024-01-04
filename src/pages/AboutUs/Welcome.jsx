@@ -6,9 +6,9 @@ const Welcome = () => {
   return (
     <div className="w-full">
       <Container className="py-[50px]">
-        <h2 className="text-2xl">Nexus Xpress Hotel</h2>
+        <h2 className="text-2xl md:text-[2rem] font-bold mb-4 font-lato text-center">About Us</h2>
 
-        <p className="leading-[30px] mt-4">
+        <p className="text-lg font-light">
           Nexus Xpress Hotel is conveniently located in a safe and secured
           environment at Federal Housing Authority (FHA) Lugbe, Abuja. It has a
           close proximity to the Nnamdi Azikiwe International Airport (25

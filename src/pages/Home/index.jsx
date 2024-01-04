@@ -1,4 +1,6 @@
+import Accomodation from "./Accomodation"
 import HeroSection from "./HeroSection"
+import SpecialOffers from "./SpecialOffers"
 import Welcome from "./Welcome"
 
 const AboutUs = () =>{
@@ -6,7 +8,8 @@ const AboutUs = () =>{
         <div>
             <HeroSection />
             <Welcome />
-
+            <SpecialOffers />
+            <Accomodation />
         </div>
     )
 }
