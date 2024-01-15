@@ -10,7 +10,7 @@ import phone from "../../assets/images/phone.png";
 export const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about-us", label: "About Us" },
-  { href: "/accommodation", label: "Accommodation" },
+  { href: "/accommodation/standard_room", label: "Accommodation" },
   { href: "/contact-us", label: "Contact Us" },
 ];
 
@@ -129,7 +129,9 @@ const Navbar = () => {
       >
 
         <nav className="flex justify-center items-center">
-          <ul className="max-w-[600px] flex-1 flex justify-between items-center max-lg:hidden font-semibold">
+          <ul className="m-auto grid grid-cols-5 justify-between justify-items-center items-center max-lg:hidden font-semibold">
+          {/* <div className="grid grid-cols-2 justify-between gap-4"><li>Home</li><li>About Us</li></div> <li><img src={Logo} alt="nexus hotel" width={50} height={20} /></li> <div className="grid grid-cols-2 justify-between gap-4"><li>Accomodation</li><li>Contact Us</li></div> */}
+          
             {fixedNavLinks.map((item, index) => (
               <li key={item.label}>
                 <NavLink

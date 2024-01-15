@@ -31,12 +31,20 @@ export default {
       "blue-2": "#0F4576",
       "warning": "#D97C3C",
       "accent-4": "#F3B263",
+      "book": "#d5b020"
     },
   backgroundImage: {
-    "hero_bg": "url('/hero_img.jpg')",
-    "about_hero_bg": "url('/aboutus_hero.jpg')",
+    "home_hero_bg": "url('/src/assets/images/rooms/home_hero.jpg')",
+    "about_hero_bg": "url('/src/assets/images/rooms/about_us_hero.jpg')",
+    "accommodation_hero_bg": "url('/src/assets/images/rooms/walkway.jpg')",
+    "contact_hero_bg": "url('/src/assets/images/rooms/contactus_1.jpg')",
+    "contact_2_bg": "url('/src/assets/images/rooms/receptionwait.jpg')",
     "nav_bg": "linear-gradient(180deg,rgba(0,0,0,.7),transparent)"
-  }},
+  },
+boxShadow: {
+  "xs": "inset 0 -7px 17px -6px rgba(0,0,0,0.5)"
+}
+},
   },
   plugins: [],
 }
