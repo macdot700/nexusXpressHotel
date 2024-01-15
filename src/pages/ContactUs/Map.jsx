@@ -10,9 +10,9 @@ const Map = () => {
       <iframe
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.911491037402!2d7.36734617569101!3d8.980291889748123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x104e73001afb6b85%3A0x2cd3bcc52837dbc1!2sNexus%20Xpress%20Hotel!5e0!3m2!1sen!2sng!4v1705330742218!5m2!1sen!2sng"
         style={{ width: "100%", height: "100%" }}
-        allowfullscreen=""
+        allowFullScreen={true}
         loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
+        referrerPolicy="no-referrer-when-downgrade"
       ></iframe>
       </div>
 

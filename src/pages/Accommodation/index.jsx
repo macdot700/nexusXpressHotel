@@ -23,7 +23,7 @@ const rooms = [{
     img: executiveRoom,
     price: "150,000"
 }, {
-    title: "Living Room",
+    title: "Suite",
     img: deluxeRoom,
     price: "150,000"
 }]
