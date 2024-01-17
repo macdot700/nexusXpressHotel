@@ -9,23 +9,23 @@ import { routeConverter } from "../../utils";
 const rooms = [{
     title: "Standard Room",
     img: standardRoom,
-    price: "150,000"
+    price: "20,000"
 }, {
     title: "Superior Room",
     img: superiorRoom,
-    price: "150,000"
+    price: "25,000"
 }, {
     title: "Deluxe Room",
     img: deluxeRoom,
-    price: "150,000"
+    price: "30,000"
 }, {
     title: "Executive Room",
     img: executiveRoom,
-    price: "150,000"
+    price: "40,000"
 }, {
     title: "Suite",
     img: deluxeRoom,
-    price: "150,000"
+    price: "45,000"
 }]
 const Accommodation = ({ children, title }) => {
   return (

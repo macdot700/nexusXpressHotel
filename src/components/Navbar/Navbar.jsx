@@ -32,7 +32,7 @@ const Navbar = () => {
   });
   return (
     <>
-      <div className="bg-blue-1 text-white">
+      <div className="bg-[#ffffff] text-black">
         <div className="z-10 w-full px-4 max-w-[1200px] m-auto">
           <div className="text-sm grid grid-cols-2 lg:grid-cols-3 justify-between items-center py-5">
             <div className="flex flex-col gap-1.5">
@@ -61,7 +61,7 @@ const Navbar = () => {
               </a>
             </div>
           </div>
-          <div className="text-xs bg-blue-1 z-30 h-[40px] w-full">
+          <div className="text-xs bg-[#ffffff] z-30 h-[40px] w-full">
             <nav className="flex justify-center items-center">
               <ul className="max-w-[600px] flex-1 flex justify-between items-center max-lg:hidden font-semibold">
                 {navLinks.map((item) => (

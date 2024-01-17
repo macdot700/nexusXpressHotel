@@ -2,7 +2,7 @@ import Container from "../../components/Container";
 import Button from "../../components/Button";
 
 
-const Room = ({title, description, img}) => {
+const Room = ({title, description, price, img}) => {
   return (
     <Container className="h-full pb-10">
       <div className="grid grid-cols-[2fr_1fr] gap-6">
@@ -22,6 +22,7 @@ const Room = ({title, description, img}) => {
           <div>
           <h2 className="text-xl md:text-2xl font-bold font-lobster">Room Amenities</h2>
           <p className="text-lg font-light">{description}</p>
+          <p>{price}</p>
             </div>
             <Button text="Book Now"/>
         </div>
