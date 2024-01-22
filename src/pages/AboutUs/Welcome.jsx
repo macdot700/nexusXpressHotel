@@ -17,12 +17,12 @@ const Welcome = () => {
           affordable and seamless blend of contemporary luxury and “warmth”
           mirroring home. With an array of 26 beautifully furnished rooms with
           facilities to make your stay comfortable we offer impeccable services
-          to our guests such as 24/7 electricity, a cyber cafe center, laundry
+          to our guests such as 24/7 electricity, laundry
           services, 24/7 restaurant with tasteful homemade meals, bush bar and
           in-house car hire services. Our dedicated staff is always ready to
           make your stay a most memorable one as they are trained to assist our
           guests with special needs as much as possible while respecting our
-          guest’s privacy. At our hotel we are driven by a purpose to redefine
+          guests privacy. At our hotel we are driven by a purpose to redefine
           hospitality with commitment to excellent service and top notch
           customer satisfaction.
         </p>

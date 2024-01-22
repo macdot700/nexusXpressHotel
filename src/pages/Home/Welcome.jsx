@@ -22,7 +22,7 @@ const Welcome = () => {
           travelers. </span>
         </p>
         <p className="font-light">
-        Take advantage of our prime location to explore the vibrant surroundings of [City]. Our concierge team is here to help you plan exciting excursions, recommend local attractions, and ensure that your stay is filled with memorable experiences.
+        Take advantage of our prime location to explore the vibrant surroundings of Abuja. Our concierge team is here to help you plan exciting excursions, recommend local attractions, and ensure that your stay is filled with memorable experiences.
         </p>
         </div>
       </Container>

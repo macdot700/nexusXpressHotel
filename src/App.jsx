@@ -18,35 +18,40 @@ const rooms = [
     path: "/accommodation/standard_room",
     title: "Standard Room",
     description:
-      "The Standard Room is the most economic room at Nexus, has a size of 10.9sqm.designed for the business traveler. It's designed for a couple or economic traveller, whose preference is privacy and comfort.",
+      "The standard room is the most economic room at nexus and is designed with warmth and the  comfortability of our guest in mind, it's homely ambiance makes you feel welcomed. ",
+    price: "Price: ₦20,000/ night.",
     img: standardRoom,
   },
   {
     path: "/accommodation/superior_room",
     title: "Superior Room",
     description:
-      "The Superior Room is the most economic room at Nexus, has a size of 10.9sqm.designed for the business traveler. It's designed for a couple or economic traveller, whose preference is privacy and comfort.",
+      "The Superior room was designed with the 'traveler' in mind and enables you to unwind and relax comfortably with a feel of home.",
+      price: "Price: ₦25,000/ night.",
     img: superiorRoom,
   },
   {
     path: "/accommodation/deluxe_room",
     title: "Deluxe Room",
     description:
-      "The Deluxe Room is the most economic room at Nexus, has a size of 10.9sqm.designed for the business traveler. It's designed for a couple or economic traveller, whose preference is privacy and comfort.",
-    img: deluxeRoom,
+      "The Deluxe room is Nexus' 'Diamond in the rough'; it's unassuming aesthetics makes for a memorable stay and comes with a complimentary breakfast.",
+      price: "Price: ₦30,000/ night.",
+      img: deluxeRoom,
   },
   {
     path: "/accommodation/executive_room",
     title: "Executive Room",
     description:
-      "The Executive Room is the most economic room at Nexus, has a size of 10.9sqm.designed for the business traveler. It's designed for a couple or economic traveller, whose preference is privacy and comfort.",
+      "The Executive room is the ideal choice for astute visitors travelling for business or long stay. It's serene embrace and luxurious design will give you all the comfort you need while making your stay memorable. It comes with a complimentary breakfast. ",
+      price: "Price: ₦40,000/ night.",
     img: executiveRoom,
   },
   {
     path: "/accommodation/suite",
     title: "Suite",
     description:
-      "The Suite is the most economic room at Nexus, has a size of 10.9sqm.designed for the business traveler. It's designed for a couple or economic traveller, whose preference is privacy and comfort.",
+      "Nexus Suite is an absolute option for ambience and luxury brimming with contemporary charm and grandeur while you enjoy top-notch privacy and tranquility. It comes with a complimentary breakfast.",
+      price: "Price: ₦45,000/ night.",
     img: executiveRoom,
   },
 ];
@@ -68,6 +73,7 @@ function App() {
                   <Room
                     title={route.title}
                     description={route.description}
+                    price={route.price}
                     img={route.img}
                   />
                 }
