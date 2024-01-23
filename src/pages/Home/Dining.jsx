@@ -8,7 +8,7 @@ const Dining = () => {
     <div className="bg-white w-full grid grid-cols-1 md:grid-cols-[2fr_1fr] items-center gap-10">
       {/* <Container className="grid grid-cols-1 md:grid-cols-2 items-center gap-10 py-[50px]"> */}
       <div className="text-center">
-          <img src={dining} className="w-full" />
+          <img src={dining} className="w-full" alt="dinning at Nexus Xpress Hotel"/>
         </div>
         <div className="max-w-[560px] m-auto">
           <h2 className="text-2xl md:text-[2rem] font-bold mb-4 font-lato">Dinning</h2>

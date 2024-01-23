@@ -19,7 +19,7 @@ const rooms = [
     title: "Standard Room",
     description:
       "The standard room is the most economic room at nexus and is designed with warmth and the  comfortability of our guest in mind, it's homely ambiance makes you feel welcomed. ",
-    price: "Price: ₦20,000/ night.",
+    price: "₦20,000",
     img: standardRoom,
   },
   {
@@ -35,7 +35,7 @@ const rooms = [
     title: "Deluxe Room",
     description:
       "The Deluxe room is Nexus' 'Diamond in the rough'; it's unassuming aesthetics makes for a memorable stay and comes with a complimentary breakfast.",
-      price: "Price: ₦30,000/ night.",
+      price: "₦30,000",
       img: deluxeRoom,
   },
   {
@@ -43,7 +43,7 @@ const rooms = [
     title: "Executive Room",
     description:
       "The Executive room is the ideal choice for astute visitors travelling for business or long stay. It's serene embrace and luxurious design will give you all the comfort you need while making your stay memorable. It comes with a complimentary breakfast. ",
-      price: "Price: ₦40,000/ night.",
+      price: "₦40,000",
     img: executiveRoom,
   },
   {
@@ -51,7 +51,7 @@ const rooms = [
     title: "Suite",
     description:
       "Nexus Suite is an absolute option for ambience and luxury brimming with contemporary charm and grandeur while you enjoy top-notch privacy and tranquility. It comes with a complimentary breakfast.",
-      price: "Price: ₦45,000/ night.",
+      price: "₦45,000",
     img: executiveRoom,
   },
 ];

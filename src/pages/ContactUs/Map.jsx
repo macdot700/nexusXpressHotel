@@ -1,4 +1,3 @@
-import receptionwait from "../../assets/images/rooms/receptionwait.jpg";
 import email from "../../assets/images/email.png";
 import phone from "../../assets/images/phone.png";
 import location from "../../assets/images/location.svg";

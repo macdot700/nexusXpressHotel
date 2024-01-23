@@ -34,11 +34,11 @@ export default {
       "book": "#d5b020"
     },
   backgroundImage: {
-    "home_hero_bg": "url('/src/assets/images/rooms/home_hero.jpg')",
-    "about_hero_bg": "url('/src/assets/images/rooms/about_us_hero.jpg')",
-    "accommodation_hero_bg": "url('/src/assets/images/rooms/walkway.jpg')",
-    "contact_hero_bg": "url('/src/assets/images/rooms/contactus_1.jpg')",
-    "contact_2_bg": "url('/src/assets/images/rooms/receptionwait.jpg')",
+    "home_hero_bg": "url('/src/assets/images/home_hero.jpg')",
+    "about_hero_bg": "url('/src/assets/images/about_us_hero.jpg')",
+    "accommodation_hero_bg": "url('/src/assets/images/walkway.jpg')",
+    "contact_hero_bg": "url('/src/assets/images/contactus_1.jpg')",
+    "contact_2_bg": "url('/src/assets/images/receptionwait.jpg')",
     "nav_bg": "linear-gradient(180deg,rgba(0,0,0,.7),transparent)"
   },
 boxShadow: {
