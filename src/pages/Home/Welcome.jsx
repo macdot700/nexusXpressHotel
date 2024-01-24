@@ -15,13 +15,13 @@ const Welcome = () => {
         <div className="font-opensans flex flex-col gap-5">
         <p  className="">
           {/* Welcome to */}
-           <span className="text-2xl md:text-[2rem] font-semibold font-lato">Nexus Hotel,</span> <span className="text-opensans font-light">Your Home Away From Home! Discover a world of
+           <span className="text-2xl md:text-[2rem] font-semibold font-lato">Nexus Hotel,</span> <span className="text-opensans ">Your Home Away From Home! Discover a world of
           luxury, comfort, and impeccable service at Nexus Hotel. Nestled in the
           heart of Abuja, our hotel offers a perfect blend of sophistication and
           warmth, making it an ideal choice for both business and leisure
           travelers. </span>
         </p>
-        <p className="font-light">
+        <p className="">
         Take advantage of our prime location to explore the vibrant surroundings of Abuja. Our concierge team is here to help you plan exciting excursions, recommend local attractions, and ensure that your stay is filled with memorable experiences.
         </p>
         </div>

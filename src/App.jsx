@@ -27,7 +27,7 @@ const rooms = [
     title: "Superior Room",
     description:
       "The Superior room was designed with the 'traveler' in mind and enables you to unwind and relax comfortably with a feel of home.",
-      price: "Price: ₦25,000/ night.",
+      price: "₦25,000",
     img: superiorRoom,
   },
   {

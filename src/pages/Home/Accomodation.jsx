@@ -9,7 +9,7 @@ const Accomodation = () => {
       <Container className="grid grid-cols-1 md:grid-cols-2 items-center gap-10 py-[50px]">
         <div className="order-2 md:order-1">
           <Link to={"/accommodation/standard_room"}><h2 className="text-2xl md:text-[2rem] font-bold mb-4 font-lato hover:text-primary-blue">Accommodation</h2></Link>
-          <p className="text-lg font-light">
+          <p className="text-lg ">
             Indulge in the epitome of comfort with our elegantly appointed rooms
             and suites. Each room is thoughtfully designed to provide a tranquil
             retreat, featuring modern amenities, plush furnishings, and

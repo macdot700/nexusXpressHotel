@@ -73,7 +73,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <p className="text-xs my-10 text-center">Copyright 2023. All Rights reserved</p>
+        <p className="text-xs mt-10 text-center">© 2024 Nexus Xpress Hotel</p>
       </div>
   );
 };

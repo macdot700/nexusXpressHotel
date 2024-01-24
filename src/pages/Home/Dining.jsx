@@ -12,8 +12,8 @@ const Dining = () => {
         </div>
         <div className="max-w-[560px] m-auto">
           <h2 className="text-2xl md:text-[2rem] font-bold mb-4 font-lato">Dinning</h2>
-          <p className="text-lg font-light pb-10 md:pb-0">
-          At Nexus Xprees Hotel, we understand that dining is an integral part of your overall experience. Our elegant dining area is carefully curated to create a warm and inviting atmosphere, perfect for enjoying a delightful meal with family, friends, or colleagues. The centerpiece of our dining experience is the exquisite dinning table, where memories are made, and conversations flow seamlessly.
+          <p className="text-lg  pb-10 md:pb-0">
+          At Nexus XpressHotel, we understand that dining is an integral part of your overall experience. Our elegant dining area is carefully curated to create a warm and inviting atmosphere, perfect for enjoying a delightful meal with family, friends, or colleagues. The centerpiece of our dining experience is the exquisite dinning table, where memories are made, and conversations flow seamlessly.
           </p>
         </div>
      

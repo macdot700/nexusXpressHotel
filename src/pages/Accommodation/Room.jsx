@@ -11,11 +11,11 @@ const Room = ({ title, description, price, img }) => {
               {title}
             </h1>
             <p className="text-lg">
-              <span className="hidden md:inline">From</span> <span className="font-medium">{price}</span>/night
+              <span className="hidden md:inline">From</span> <span className="font-medium text-book">{price}</span><span className="font-medium">/night</span>
             </p>
           </div>
 
-          <p className="text-lg font-light"></p>
+          <p className="text-lg "></p>
         </div>
         <div></div>
       </div>
@@ -26,7 +26,7 @@ const Room = ({ title, description, price, img }) => {
             <h2 className="text-xl md:text-2xl font-bold font-lobster">
               Room Amenities
             </h2>
-            <p className="text-lg font-light">{description}</p>
+            <p className="text-lg ">{description}</p>
           </div>
           <a
             href="https://wa.me/qr/ENYDU7YZMWXRF1"

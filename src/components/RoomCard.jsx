@@ -6,7 +6,7 @@ const RoomCard = ({img, title, price, link}) =>{
         <Link to={actuaLink} className="hover:text-primary-blue">
             <div><img src={img} alt={title}/></div>
             <div className="flex justify-between items-center py-5 px-2.5">
-                <p>{title}</p>  <small>₦{price}/night</small>
+                <p className="font-medium">{title}</p>  <small className="font-semibold">₦{price}/night</small>
             </div>
             </Link>
         </>

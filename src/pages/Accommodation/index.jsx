@@ -1,3 +1,5 @@
+import { useEffect } from "react"
+
 import HeroSection from "./HeroSection";
 import standardRoom from "../../assets/images/standardRoom.jpg";
 import superiorRoom from "../../assets/images/superiorRoom.jpg";
@@ -6,41 +8,55 @@ import executiveRoom from "../../assets/images/executiveRoom.jpg";
 import RoomCard from "../../components/RoomCard";
 import { routeConverter } from "../../utils";
 
-const rooms = [{
+const rooms = [
+  {
     title: "Standard Room",
     img: standardRoom,
-    price: "20,000"
-}, {
+    price: "20,000",
+  },
+  {
     title: "Superior Room",
     img: superiorRoom,
-    price: "25,000"
-}, {
+    price: "25,000",
+  },
+  {
     title: "Deluxe Room",
     img: deluxeRoom,
-    price: "30,000"
-}, {
+    price: "30,000",
+  },
+  {
     title: "Executive Room",
     img: executiveRoom,
-    price: "40,000"
-}, {
+    price: "40,000",
+  },
+  {
     title: "Suite",
     img: deluxeRoom,
-    price: "45,000"
-}]
+    price: "45,000",
+  },
+];
 const Accommodation = ({ children, title }) => {
+  useEffect(()=>{
+    window.scroll(0, 0)
+}, [])
   return (
     <div>
       <HeroSection />
       <div className="py-20">
         {children}
-        <p className="text-lg font-light max-w-[750px] text-center mt-[100px] m-auto">
-          Book your stay now and immerse yourself in a world of unparalleled
-          hospitality. We look forward to welcoming you to your home away from
-          home. Nexus Xpress. We also brought together some of the nicest
-          persons to take care of you while you stay with us.
+        <p className="text-lg  max-w-[750px] text-center mt-[100px] m-auto">
+          Secure your accommodation today and indulge in a realm of unmatched
+          hospitality. We eagerly anticipate hosting you at Nexus Xpress Hotel,
+          your "home away from home." Our team comprises some of the most
+          welcoming individuals dedicated to ensuring your comfort during your
+          stay with us.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-10 px-4">
-        {rooms.map((room, idx)=>{return room.title !== title ?  <RoomCard key={idx} {...room} link={routeConverter(room.title)} /> : null})}
+          {rooms.map((room, idx) => {
+            return room.title !== title ? (
+              <RoomCard key={idx} {...room} link={routeConverter(room.title)} />
+            ) : null;
+          })}
         </div>
       </div>
     </div>
