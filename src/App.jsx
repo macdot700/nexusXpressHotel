@@ -21,7 +21,7 @@ const rooms = [
     title: "Standard Room",
     description:
       "The standard room is the most economic room at nexus and is designed with warmth and the  comfortability of our guest in mind, it's homely ambiance makes you feel welcomed. ",
-    price: "₦20,000",
+    price: "₦23,000",
     img: standardRoom,
   },
   {
@@ -29,7 +29,7 @@ const rooms = [
     title: "Superior Room",
     description:
       "The Superior room was designed with the 'traveler' in mind and enables you to unwind and relax comfortably with a feel of home.",
-      price: "₦25,000",
+      price: "₦27,000",
     img: superiorRoom,
   },
   {

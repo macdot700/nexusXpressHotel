@@ -12,12 +12,12 @@ const rooms = [
   {
     title: "Standard Room",
     img: standardRoom,
-    price: "20,000",
+    price: "23,000",
   },
   {
     title: "Superior Room",
     img: superiorRoom,
-    price: "25,000",
+    price: "27,000",
   },
   {
     title: "Deluxe Room",
