@@ -36,7 +36,7 @@ const Footer = () => {
                   {navItem.label}
                 </NavLink>
               ))}
-              <NavLink to={"/"}>Privacy Policy</NavLink>
+              <NavLink to={"/privacy_policy"}>Privacy Policy</NavLink>
             </ul>
 
             <div className="w-full flex flex-col justify-between gap-2">

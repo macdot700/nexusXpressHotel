@@ -12,6 +12,8 @@ import superiorRoom from "./assets/images/superiorRoom.jpg";
 import deluxeRoom from "./assets/images/deluxeRoom.jpg";
 import executiveRoom from "./assets/images/executiveRoom.jpg";
 import ContactUs from "./pages/ContactUs";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import NotFound from "./pages/NotFound";
 
 const rooms = [
   {
@@ -83,6 +85,8 @@ function App() {
         )}
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/privacy_policy" element={<PrivacyPolicy />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </>

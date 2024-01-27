@@ -29,7 +29,7 @@ const Room = ({ title, description, price, img }) => {
             <p className="text-lg ">{description}</p>
           </div>
           <a
-            href="https://wa.me/qr/ENYDU7YZMWXRF1"
+            href="https://wa.me/message/6N3Q5S5IVQSMP1"
             target="_blank"
             className="text-center px-6 py-4 bg-book hover:text-book hover:bg-white transition ease-in-out delay-150 font-medium text-white shadow-xs"
             rel="noopener noreferrer"

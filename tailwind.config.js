@@ -9,28 +9,15 @@ export default {
       poppins: ["Poppins", "sans-serif"],
       lobster: ["Lobster", "sans-serif"],
       opensans: ["Open Sans", "sans-serif"],
-      madeoutersans: ["madeoutofsans", "sans-serif"],
       lato: ["Lato", "sans-serif"]
     },
     extend: {colors: {
       "primary-blue": "#1F5EF5",
       "grey-1": "#f2f2f2",
       "blue-1": "#1a283f",
-      "error": "#B71816",
       "black": "#2B2B2B",
-      "black-2": "rgba(51, 51, 51, 0.70)",
-      "grey-2": "#E1E1E1",
-      "grey-3": "#D3D3D3",
-      "grey-4": "#C4C4C4",
-      "grey-5": "#B3B3B3",
       "grey-7": "#757575",
-      "green-1": "#1E8E3A",
       "white": "#FFFFFF",
-      "white-2": "#F2F2F2",
-      "blue-3": "#3B7CAC",
-      "blue-2": "#0F4576",
-      "warning": "#D97C3C",
-      "accent-4": "#F3B263",
       "book": "#d5b020"
     },
   backgroundImage: {
