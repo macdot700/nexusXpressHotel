@@ -32,7 +32,7 @@ const Navbar = () => {
   return (
     <>
       <div className="bg-[#ffffff] text-black">
-        <div className="z-10 w-full px-4 max-w-[1200px] m-auto">
+        <div className="z-10 w-full max-w-[1990px] px-4 sm:px-10 lg:px-[48px] m-auto">
           <div className="text-sm grid grid-cols-2 lg:grid-cols-3 justify-between items-center py-5">
             <div className="flex flex-col gap-1.5">
               <p>Nexus Xpress Hotel,</p>

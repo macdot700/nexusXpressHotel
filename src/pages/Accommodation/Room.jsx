@@ -20,7 +20,7 @@ const Room = ({ title, description, price, img }) => {
         <div></div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6">
-        <img src={img} alt={title} />
+        <img src={img} alt={title} className="w-full" />
         <div className="flex flex-col justify-between">
           <div>
             <h2 className="text-xl md:text-2xl font-bold font-lobster">

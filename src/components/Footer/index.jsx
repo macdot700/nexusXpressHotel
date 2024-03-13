@@ -10,7 +10,7 @@ import phone from "../../assets/images/phone.png";
 const Footer = () => {
   return (
       <div className="bg-blue-1 py-[63px] text-white px-4">
-        <div className="max-w-[1200px] px-4 md:px-0 w-full m-auto">
+        <div className="max-w-[1990px] px-4 sm:px-10 lg:px-[48px] w-full m-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 justify-between gap-6">
             <div className="max-w-[502px] flex flex-col justify-between">
               <div className="flex flex-col gap-6">

@@ -51,7 +51,7 @@ const Accommodation = ({ children, title }) => {
           welcoming individuals dedicated to ensuring your comfort during your
           stay with us.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-10 px-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-10 max-w-[1990px] px-4 sm:px-10 lg:px-[48px] m-auto">
           {rooms.map((room, idx) => {
             return room.title !== title ? (
               <RoomCard key={idx} {...room} link={routeConverter(room.title)} />
