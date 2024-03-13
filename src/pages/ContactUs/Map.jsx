@@ -4,7 +4,7 @@ import location from "../../assets/images/location.svg";
 
 const Map = () => {
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 my-[100px]">
+    <div className="w-full grid grid-cols-1 md:grid-cols-2 my-[100px] max-w-[1990px] px-4 sm:px-10 lg:px-[48px] m-auto">
       <div className="h-[360px] md:h-[690px]">
       <iframe
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.911491037402!2d7.36734617569101!3d8.980291889748123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x104e73001afb6b85%3A0x2cd3bcc52837dbc1!2sNexus%20Xpress%20Hotel!5e0!3m2!1sen!2sng!4v1705330742218!5m2!1sen!2sng"

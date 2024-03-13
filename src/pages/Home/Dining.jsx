@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Dining = () => {
   return (
-    <div className="bg-white w-full grid grid-cols-1 md:grid-cols-[2fr_1fr] items-center gap-10">
+    <div className="bg-white w-full grid grid-cols-1 md:grid-cols-[2fr_1fr] items-center gap-10 max-w-[1990px] px-4 sm:px-10 lg:px-[48px] m-auto">
       {/* <Container className="grid grid-cols-1 md:grid-cols-2 items-center gap-10 py-[50px]"> */}
       <div className="text-center">
           <img src={dining} className="w-full" alt="dinning at Nexus Xpress Hotel"/>
