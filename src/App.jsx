@@ -20,31 +20,31 @@ const rooms = [
     path: "/accommodation/standard_room",
     title: "Standard Room",
     description:
-      "The standard room is the most economic room at nexus and is designed with warmth and the  comfortability of our guest in mind, it's homely ambiance makes you feel welcomed. ",
-    price: "₦23,000",
+      "The Standard Room is our most affordable option at Nexus Xpress Hotel, thoughtfully designed to offer comfort, warmth, and a homely atmosphere. It features a 4x6 bed, smart TV, complimentary breakfast for one guest, free beverages and bottled water, air conditioning, a private bathroom, and high-speed Wi-Fi.",
+    price: "₦25,000",
     img: standardRoom,
   },
   {
     path: "/accommodation/superior_room",
     title: "Superior Room",
     description:
-      "The Superior room was designed with the 'traveler' in mind and enables you to unwind and relax comfortably with a feel of home.",
-      price: "₦27,000",
+      "The Superior Room was designed with the traveler in mind, offering a warm and relaxing space that feels like home. It features a 5x6 bed, smart TV, complimentary breakfast for one guest, free beverages and bottled water, air conditioning, a private bathroom, and high-speed Wi-Fi.",
+      price: "₦30,000",
     img: superiorRoom,
   },
   {
     path: "/accommodation/deluxe_room",
     title: "Deluxe Room",
     description:
-      "The Deluxe room is Nexus' 'Diamond in the rough'; it's unassuming aesthetics makes for a memorable stay and comes with a complimentary breakfast.",
-      price: "₦30,000",
+      "The Deluxe Room is Nexus Xpress Hotel’s diamond in the rough; its simple yet elegant design creates a memorable and comfortable stay. It features a 6x6 bed, smart TV, complimentary breakfast for one guest, free beverages and bottled water, air conditioning, a private bathroom, and high-speed Wi-Fi.",
+      price: "₦35,000",
       img: deluxeRoom,
   },
   {
     path: "/accommodation/executive_room",
     title: "Executive Room",
     description:
-      "The Executive room is the ideal choice for astute visitors travelling for business or long stay. It's serene embrace and luxurious design will give you all the comfort you need while making your stay memorable. It comes with a complimentary breakfast. ",
+      "The Executive Room is the most spacious and refined accommodation at Nexus Xpress Hotel, ideal for business travelers or long stays. Its serene atmosphere, generous layout, and luxurious finish provide unmatched comfort and a truly memorable experience. It features a large bed, smart TV, complimentary breakfast for one guest, free beverages and bottled water, air conditioning, a private bathroom, and high-speed Wi-Fi.",
       price: "₦40,000",
     img: executiveRoom,
   },
@@ -52,7 +52,7 @@ const rooms = [
     path: "/accommodation/suite",
     title: "Suite",
     description:
-      "Nexus Suite is an absolute option for ambience and luxury brimming with contemporary charm and grandeur while you enjoy top-notch privacy and tranquility. It comes with a complimentary breakfast.",
+      "The Nexus Suite is the ultimate choice for ambience and luxury, brimming with contemporary charm and grandeur while offering top notch privacy and tranquility. It features a separate bedroom and living room with a long sofa, two chairs, two smart TVs, two air conditioners, and two bathrooms. Guests also enjoy a complimentary breakfast for 1 person, free beverages and bottled water, and high-speed Wi-Fi.",
       price: "₦45,000",
     img: executiveRoom,
   },
