@@ -14,6 +14,8 @@ import executiveRoom from "./assets/images/executiveRoom.jpg";
 import ContactUs from "./pages/ContactUs";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
+import Reservation from "./pages/Reservation";
+import ThankYouPage from "./pages/ThankYouPage";
 
 const rooms = [
   {
@@ -29,7 +31,7 @@ const rooms = [
     title: "Superior Room",
     description:
       "The Superior Room was designed with the traveler in mind, offering a warm and relaxing space that feels like home. It features a 5x6 bed, smart TV, complimentary breakfast for one guest, free beverages and bottled water, air conditioning, a private bathroom, and high-speed Wi-Fi.",
-      price: "₦30,000",
+    price: "₦30,000",
     img: superiorRoom,
   },
   {
@@ -37,15 +39,15 @@ const rooms = [
     title: "Deluxe Room",
     description:
       "The Deluxe Room is Nexus Xpress Hotel’s diamond in the rough; its simple yet elegant design creates a memorable and comfortable stay. It features a 6x6 bed, smart TV, complimentary breakfast for one guest, free beverages and bottled water, air conditioning, a private bathroom, and high-speed Wi-Fi.",
-      price: "₦35,000",
-      img: deluxeRoom,
+    price: "₦35,000",
+    img: deluxeRoom,
   },
   {
     path: "/accommodation/executive_room",
     title: "Executive Room",
     description:
       "The Executive Room is the most spacious and refined accommodation at Nexus Xpress Hotel, ideal for business travelers or long stays. Its serene atmosphere, generous layout, and luxurious finish provide unmatched comfort and a truly memorable experience. It features a large bed, smart TV, complimentary breakfast for one guest, free beverages and bottled water, air conditioning, a private bathroom, and high-speed Wi-Fi.",
-      price: "₦40,000",
+    price: "₦40,000",
     img: executiveRoom,
   },
   {
@@ -53,19 +55,19 @@ const rooms = [
     title: "Suite",
     description:
       "The Nexus Suite is the ultimate choice for ambience and luxury, brimming with contemporary charm and grandeur while offering top notch privacy and tranquility. It features a separate bedroom and living room with a long sofa, two chairs, two smart TVs, two air conditioners, and two bathrooms. Guests also enjoy a complimentary breakfast for 1 person, free beverages and bottled water, and high-speed Wi-Fi.",
-      price: "₦45,000",
+    price: "₦45,000",
     img: executiveRoom,
   },
 ];
-function App() {
-  const [count, setCount] = useState(0);
 
+function App() {
   return (
     <>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        {rooms.map((route, idx) => <Route
+        {rooms.map((route, idx) => (
+          <Route
             key={idx}
             path={route.path}
             element={
@@ -82,10 +84,12 @@ function App() {
               />
             }
           />
-        )}
+        ))}
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/privacy_policy" element={<PrivacyPolicy />} />
+        <Route path="/reservation" element={<Reservation />} />
+        <Route path="/thank-you" element={<ThankYouPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

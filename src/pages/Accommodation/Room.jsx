@@ -1,5 +1,7 @@
 import Container from "../../components/Container";
 import Button from "../../components/Button";
+import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const Room = ({ title, description, price, img }) => {
   return (
@@ -11,7 +13,9 @@ const Room = ({ title, description, price, img }) => {
               {title}
             </h1>
             <p className="text-lg">
-              <span className="hidden md:inline">From</span> <span className="font-medium text-book">{price}</span><span className="font-medium">/night</span>
+              <span className="hidden md:inline">From</span>{" "}
+              <span className="font-medium text-book">{price}</span>
+              <span className="font-medium">/night</span>
             </p>
           </div>
 
@@ -19,6 +23,7 @@ const Room = ({ title, description, price, img }) => {
         </div>
         <div></div>
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6">
         <img src={img} alt={title} className="w-full" />
         <div className="flex flex-col justify-between">
@@ -28,15 +33,14 @@ const Room = ({ title, description, price, img }) => {
             </h2>
             <p className="text-lg ">{description}</p>
           </div>
-          <a
-            href="https://forms.gle/gg6pEu4ozogF6KAD7"
-            target="_blank"
-            className="text-center px-6 py-4 bg-book hover:text-book hover:bg-white transition ease-in-out delay-150 font-medium text-white shadow-xs"
-            rel="noopener noreferrer"
+
+          {/* Book Now Button that links to the reservation form */}
+          <Link
+            to="/reservation"
+            className="text-center mt-4 px-6 py-4 bg-book hover:text-book hover:bg-white transition ease-in-out delay-150 font-medium text-white shadow-xs rounded-md"
           >
             Book Now
-          </a>
-          {/* <Button text="Book now" onClick={window.open("url", '_blank')} /> */}
+          </Link>
         </div>
       </div>
     </Container>
