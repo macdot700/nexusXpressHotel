@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate, Routes, Route, BrowserRouter } from "react-router-dom";
+import { useNavigate, Routes, Route, HashRouter } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home";
@@ -77,7 +77,7 @@ const rooms = [
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <RedirectHandler />
       <Navbar />
       <Routes>
@@ -109,7 +109,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
