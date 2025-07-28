@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigate, Routes, Route, BrowserRouter } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
-import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
 import Footer from "./components/Footer";
@@ -16,6 +16,21 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
 import Reservation from "./pages/Reservation";
 import ThankYouPage from "./pages/ThankYouPage";
+
+// RedirectHandler to support static hosting
+function RedirectHandler() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const redirectPath = params.get("redirect");
+    if (redirectPath) {
+      navigate(redirectPath);
+    }
+  }, [navigate]);
+
+  return null;
+}
 
 const rooms = [
   {
@@ -38,7 +53,7 @@ const rooms = [
     path: "/accommodation/deluxe_room",
     title: "Deluxe Room",
     description:
-      "The Deluxe Room is Nexus Xpress Hotel’s diamond in the rough; its simple yet elegant design creates a memorable and comfortable stay. It features a 6x6 bed, smart TV, complimentary breakfast for one guest, free beverages and bottled water, air conditioning, a private bathroom, and high-speed Wi-Fi.",
+      "The Deluxe Room is Nexus Xpress Hotel’s diamond in the rough. Its simple yet elegant design creates a memorable and comfortable stay. It features a 6x6 bed, smart TV, complimentary breakfast for one guest, free beverages and bottled water, air conditioning, a private bathroom, and high-speed Wi-Fi.",
     price: "₦35,000",
     img: deluxeRoom,
   },
@@ -62,7 +77,8 @@ const rooms = [
 
 function App() {
   return (
-    <>
+    <BrowserRouter>
+      <RedirectHandler />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -93,7 +109,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
-    </>
+    </BrowserRouter>
   );
 }
 
