@@ -38,7 +38,8 @@ const rooms = [
     title: "Standard Room",
     description:
       "The Standard Room is our most affordable option at Nexus Xpress Hotel...",
-    price: "₦25,000",
+    weekdayPrice: "28,000",
+weekendPrice: "25,000",
     img: standardRoom,
   },
   {
@@ -46,7 +47,8 @@ const rooms = [
     title: "Superior Room",
     description:
       "The Superior Room was designed with the traveler in mind...",
-    price: "₦30,000",
+    weekdayPrice: "33,000",
+weekendPrice: "30,000",
     img: superiorRoom,
   },
   {
@@ -54,7 +56,8 @@ const rooms = [
     title: "Deluxe Room",
     description:
       "The Deluxe Room is Nexus Xpress Hotel’s diamond in the rough...",
-    price: "₦35,000",
+    weekdayPrice: "38,000",
+weekendPrice: "35,000",
     img: deluxeRoom,
   },
   {
@@ -62,7 +65,8 @@ const rooms = [
     title: "Executive Room",
     description:
       "The Executive Room is the most spacious and refined accommodation...",
-    price: "₦40,000",
+    weekdayPrice: "43,000",
+weekendPrice: "40,000",
     img: executiveRoom,
   },
   {
@@ -70,8 +74,9 @@ const rooms = [
     title: "Suite",
     description:
       "The Nexus Suite is the ultimate choice for ambience and luxury...",
-    price: "₦45,000",
-    img: executiveRoom,
+    weekdayPrice: "45,000",
+weekendPrice: "43,000",
+    img: deluxeRoom,
   },
 ];
 
@@ -93,7 +98,8 @@ function App() {
                   <Room
                     title={route.title}
                     description={route.description}
-                    price={route.price}
+                    weekdayPrice={route.weekdayPrice}
+weekendPrice={route.weekendPrice}
                     img={route.img}
                   />
                 }

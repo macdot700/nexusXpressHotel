@@ -12,27 +12,32 @@ const rooms = [
   {
     title: "Standard Room",
     img: standardRoom,
-    price: "25,000",
+    weekdayPrice: "28,000",
+    weekendPrice: "25,000",
   },
   {
     title: "Superior Room",
     img: superiorRoom,
-    price: "30,000",
+    weekdayPrice: "33,000",
+    weekendPrice: "30,000",
   },
   {
     title: "Deluxe Room",
     img: deluxeRoom,
-    price: "35,000",
+    weekdayPrice: "38,000",
+    weekendPrice: "35,000",
   },
   {
     title: "Executive Room",
     img: executiveRoom,
-    price: "40,000",
+    weekdayPrice: "43,000",
+    weekendPrice: "40,000",
   },
   {
-    title: "Suite",
+    title: "Nexus Suite",
     img: deluxeRoom,
-    price: "45,000",
+    weekdayPrice: "45,000",
+    weekendPrice: "43,000",
   },
 ];
 const Accommodation = ({ children, title }) => {

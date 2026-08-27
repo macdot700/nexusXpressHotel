@@ -3,7 +3,7 @@ import Button from "../../components/Button";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
-const Room = ({ title, description, price, img }) => {
+const Room = ({ title, description, weekdayPrice, weekendPrice, img }) => {
   return (
     <Container className="h-full pb-10">
       <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6">
@@ -12,11 +12,14 @@ const Room = ({ title, description, price, img }) => {
             <h1 className="text-2xl md:text-[2rem] font-bold mb-4 font-lato">
               {title}
             </h1>
-            <p className="text-lg">
-              <span className="hidden md:inline">From</span>{" "}
-              <span className="font-medium text-book">{price}</span>
-              <span className="font-medium">/night</span>
-            </p>
+            <div className="text-right">
+  <span className="block font-medium">
+    Weekday: ₦{weekdayPrice}
+  </span>
+  <span className="block font-medium">
+    Weekend: ₦{weekendPrice}
+  </span>
+</div>
           </div>
 
           <p className="text-lg "></p>
