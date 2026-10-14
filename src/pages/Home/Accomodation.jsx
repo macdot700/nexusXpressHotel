@@ -1,28 +1,125 @@
+import { NavLink } from "react-router-dom";
 import Container from "../../components/Container";
-import executiveRoom from "../../assets/images/executiveRoom.jpg";
+import standardRoom from "../../assets/images/standardRoom.jpg";
+import superiorRoom from "../../assets/images/superiorRoom.jpg";
+import deluxeRoom from "../../assets/images/deluxeRoom.jpg";
 
-import { Link } from "react-router-dom";
+const rooms = [
+  {
+    name: "Standard Room",
+    image: standardRoom,
+    weekday: "₦28,000",
+    weekend: "₦25,000",
+    link: "/accommodation/standard_room",
+  },
+  {
+    name: "Superior Room",
+    image: superiorRoom,
+    weekday: "₦33,000",
+    weekend: "₦30,000",
+    link: "/accommodation/superior_room",
+  },
+  {
+    name: "Deluxe Room",
+    image: deluxeRoom,
+    weekday: "₦38,000",
+    weekend: "₦35,000",
+    link: "/accommodation/deluxe_room",
+  },
+];
 
 const Accomodation = () => {
   return (
-    <div className="bg-grey-1 w-full">
-      <Container className="grid grid-cols-1 md:grid-cols-2 items-center gap-10 py-[50px]">
-        <div className="order-2 md:order-1">
-          <Link to={"/accommodation/standard_room"}><h2 className="text-2xl md:text-[2rem] font-bold mb-4 font-lato hover:text-primary-blue">Accommodation</h2></Link>
-          <p className="text-lg ">
-            Indulge in the epitome of comfort with our elegantly appointed rooms
-            and suites. Each room is thoughtfully designed to provide a tranquil
-            retreat, featuring modern amenities, plush furnishings, and
-            breathtaking views of Lugbe. Whether you're here for a quick
-            business trip or a relaxing vacation, our accommodations are
-            tailored to meet your every need.
+    <section className="bg-white pb-12 pt-4 md:pb-14 md:pt-6 lg:pb-16 lg:pt-8">
+      <Container>
+
+        {/* Section heading */}
+        <div className="mx-auto max-w-3xl text-center">
+
+          <span className="inline-block bg-brand-lightBlue px-4 py-2 text-sm font-bold uppercase tracking-[0.2em] text-brand-deepBlue">
+            Our Accommodation
+          </span>
+
+          <h2 className="mt-6 font-display text-4xl font-semibold leading-tight text-brand-deepBlue sm:text-5xl md:text-6xl">
+            Rooms Made for Your Comfort
+          </h2>
+
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-brand-muted md:text-lg">
+            Choose from our range of comfortable rooms, thoughtfully designed
+            to give you a relaxing and convenient stay.
           </p>
+
         </div>
-        <div className="text-center order-1 md:order-2">
-          <img src={executiveRoom} className="w-full" />
+
+        {/* Room cards */}
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+
+          {rooms.map((room) => (
+            <div
+              key={room.name}
+              className="overflow-hidden border border-gray-100 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg"
+            >
+              <img
+                src={room.image}
+                alt={room.name}
+                className="h-64 w-full object-cover"
+              />
+
+              <div className="p-7">
+
+                <h3 className="font-display text-3xl font-semibold text-brand-deepBlue">
+                  {room.name}
+                </h3>
+
+                <div className="mt-6 flex items-end justify-between gap-6">
+
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-brand-muted">
+                      Weekday
+                    </p>
+
+                    <p className="mt-2 text-xl font-bold text-brand-deepBlue">
+                      {room.weekday}
+                    </p>
+                  </div>
+
+                  <div className="text-right">
+                    <p className="text-xs font-bold uppercase tracking-wider text-brand-muted">
+                      Weekend
+                    </p>
+
+                    <p className="mt-2 text-xl font-bold text-brand-deepBlue">
+                      {room.weekend}
+                    </p>
+                  </div>
+
+                </div>
+
+                <NavLink
+                  to={room.link}
+                  className="mt-7 flex items-center justify-center border border-brand-deepBlue px-6 py-4 text-sm font-bold uppercase tracking-widest text-brand-deepBlue transition-colors duration-300 hover:bg-brand-deepBlue hover:text-white"
+                >
+                  View Room
+                </NavLink>
+
+              </div>
+            </div>
+          ))}
+
         </div>
+
+        {/* View all rooms */}
+        <div className="mt-8 text-center">
+          <NavLink
+            to="/accommodation"
+            className="inline-flex bg-brand-blue px-8 py-4 text-sm font-bold uppercase tracking-widest text-white transition-colors duration-300 hover:bg-brand-deepBlue"
+          >
+            View All Rooms
+          </NavLink>
+        </div>
+
       </Container>
-    </div>
+    </section>
   );
 };
 

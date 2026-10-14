@@ -1,24 +1,55 @@
+import { NavLink } from "react-router-dom";
 import Container from "../../components/Container";
-import dining from "../../assets/images/dining.jpg";
-
-import { Link } from "react-router-dom";
 
 const Dining = () => {
   return (
-    <div className="bg-white w-full grid grid-cols-1 md:grid-cols-[2fr_1fr] items-center gap-10 max-w-[1990px] px-4 sm:px-10 lg:px-[48px] m-auto">
-      {/* <Container className="grid grid-cols-1 md:grid-cols-2 items-center gap-10 py-[50px]"> */}
-      <div className="text-center">
-          <img src={dining} className="w-full" alt="dinning at Nexus Xpress Hotel"/>
+    <section className="bg-white py-20 md:py-24 lg:py-28">
+      <Container>
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+
+          {/* Image */}
+          <div className="order-2 overflow-hidden lg:order-1">
+            <img
+              src="/src/assets/images/dining.jpg"
+              alt="Dining at Nexus Xpress Hotel"
+              className="h-[400px] w-full object-cover transition-transform duration-500 hover:scale-105 md:h-[500px]"
+            />
+          </div>
+
+          {/* Content */}
+          <div className="order-1 lg:order-2">
+            <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-brand-blue">
+              Dining & Drinks
+            </p>
+
+            <h2 className="font-display text-4xl font-semibold leading-tight text-brand-deepBlue sm:text-5xl md:text-6xl">
+              Good Food, Good Moments
+            </h2>
+
+            <p className="mt-6 text-base leading-8 text-brand-muted md:text-lg">
+              Whether you are settling in after a long day or simply looking
+              for somewhere to relax, our dining and bar spaces offer a
+              comfortable setting to enjoy good food, drinks and great company.
+            </p>
+
+            <p className="mt-5 text-base leading-8 text-brand-muted md:text-lg">
+              From meals in the restaurant to drinks and relaxed evenings at
+              the bar, there is always something to enjoy at Nexus.
+            </p>
+
+            <div className="mt-8">
+              <NavLink
+                to="/dining"
+                className="inline-flex bg-brand-deepBlue px-7 py-4 text-sm font-bold uppercase tracking-widest text-white transition-colors duration-300 hover:bg-brand-blue"
+              >
+                Explore Dining
+              </NavLink>
+            </div>
+          </div>
+
         </div>
-        <div className="max-w-[560px] m-auto">
-          <h2 className="text-2xl md:text-[2rem] font-bold mb-4 font-lato">Dinning</h2>
-          <p className="text-lg  pb-10 md:pb-0">
-          At Nexus XpressHotel, we understand that dining is an integral part of your overall experience. Our elegant dining area is carefully curated to create a warm and inviting atmosphere, perfect for enjoying a delightful meal with family, friends, or colleagues. The centerpiece of our dining experience is the exquisite dinning table, where memories are made, and conversations flow seamlessly.
-          </p>
-        </div>
-     
-      {/* </Container> */}
-    </div>
+      </Container>
+    </section>
   );
 };
 
