@@ -1,19 +1,20 @@
-import { useEffect } from "react"
-import HeroSection from "./HeroSection"
-import Welcome from "./Welcome"
+import { useEffect } from "react";
+import HeroSection from "./HeroSection";
+import Welcome from "./Welcome";
+import NexusExperience from "./NexusExperience";
 
-const AboutUs = () =>{
+const AboutUs = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-    useEffect(()=>{
-        window.scroll(0, 0)
-    }, [])
-    return(
-        <div>
-            <HeroSection />
-            <Welcome />
+  return (
+    <div>
+      <HeroSection />
+      <Welcome />
+      <NexusExperience />
+    </div>
+  );
+};
 
-        </div>
-    )
-}
-
-export default AboutUs
+export default AboutUs;

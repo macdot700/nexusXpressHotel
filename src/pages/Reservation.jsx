@@ -1,4 +1,3 @@
-
 import React, { useMemo, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -143,32 +142,66 @@ const Reservation = () => {
       estimated_total: `₦${booking.total.toLocaleString("en-NG")}`,
       rate_breakdown: booking.breakdown
         .map(
-          (night) =>
-            `${night.date}: ₦${night.rate.toLocaleString("en-NG")}`
+          (night, index) =>
+            `${selectedRoom.name}, night ${index + 1} of ${nights}: ${night.date}: ₦${night.rate.toLocaleString("en-NG")}`
         )
         .join("\n"),
     };
 
     try {
-      await emailjs.send(
-        "service_wjrcah7",
-        "template_wneulen",
-        templateParams,
-        "FHN_1Krva_7DZA4E9"
+      // Create the customer and draft invoice through the Cloudflare backend.
+      const response = await fetch(
+        "https://nexusxpresshotel-backend.macdot700.workers.dev/api/reservations",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: templateParams.full_name,
+            email: templateParams.email,
+            phone: templateParams.phone,
+            roomType: selectedRoom.name,
+            checkIn,
+            checkOut,
+          }),
+        }
       );
 
-      await emailjs.send(
-        "service_wjrcah7",
-        "template_nk9h8z9",
-        templateParams,
-        "FHN_1Krva_7DZA4E9"
-      );
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || "We couldn't submit your reservation request."
+        );
+      }
+
+      // Keep existing notifications.
+      // Their failure must not trigger a second invoice submission.
+      for (const templateId of ["template_wneulen", "template_nk9h8z9"]) {
+        try {
+          await emailjs.send(
+            "service_wjrcah7",
+            templateId,
+            {
+              ...templateParams,
+              zoho_invoice_number: result.invoice?.number || "",
+              zoho_invoice_status: result.invoice?.status || "Draft",
+            },
+            "FHN_1Krva_7DZA4E9"
+          );
+        } catch (emailError) {
+          console.error(
+            `EmailJS notification failed (${templateId}):`,
+            emailError
+          );
+        }
+      }
 
       navigate("/thank-you");
     } catch (error) {
-      console.error("EmailJS error:", error);
+      console.error("Reservation submission failed:", error);
       setError(
-        "We couldn't submit your reservation request. Please try again."
+        error.message ||
+          "We couldn't submit your reservation request. Please try again."
       );
     } finally {
       setLoading(false);
