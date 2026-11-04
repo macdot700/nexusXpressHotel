@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import HeroSection from "./HeroSection";
 import Welcome from "./Welcome";
+import NameMeaning from "./NameMeaning";
 import NexusExperience from "./NexusExperience";
 
 const AboutUs = () => {
@@ -12,6 +13,7 @@ const AboutUs = () => {
     <div>
       <HeroSection />
       <Welcome />
+      <NameMeaning />
       <NexusExperience />
     </div>
   );

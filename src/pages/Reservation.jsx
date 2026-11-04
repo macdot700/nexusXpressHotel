@@ -36,15 +36,21 @@ const Reservation = () => {
     : "";
 
   const [loading, setLoading] = useState(false);
-  const [roomType, setRoomType] = useState(initialRoom);
+  const [roomSelections, setRoomSelections] = useState([
+    { roomType: initialRoom, quantity: 1 },
+  ]);
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState("1");
   const [error, setError] = useState("");
 
-  const selectedRoom = roomOptions.find(
-    (room) => room.name === roomType
-  );
+  const selectedRooms = roomSelections.map((selection) => ({
+    ...selection,
+    room: roomOptions.find(
+      (room) => room.name === selection.roomType
+    ),
+    quantity: Math.max(1, Number(selection.quantity) || 1),
+  }));
 
   const nights = useMemo(() => {
     if (!checkIn || !checkOut || checkOut <= checkIn) return 0;
@@ -52,37 +58,79 @@ const Reservation = () => {
     const start = new Date(`${checkIn}T12:00:00`);
     const end = new Date(`${checkOut}T12:00:00`);
 
-    return Math.round((end - start) / (1000 * 60 * 60 * 24));
+    return Math.round(
+      (end - start) / (1000 * 60 * 60 * 24)
+    );
   }, [checkIn, checkOut]);
 
   const booking = useMemo(() => {
-    if (!selectedRoom || nights === 0) {
-      return { total: 0, breakdown: [] };
+    if (!nights || selectedRooms.some((item) => !item.room)) {
+      return {
+        total: 0,
+        totalRooms: 0,
+        capacity: 0,
+        breakdown: [],
+      };
     }
 
     const breakdown = [];
     let total = 0;
+    let totalRooms = 0;
+    let capacity = 0;
 
-    for (let i = 0; i < nights; i++) {
-      const date = new Date(`${checkIn}T12:00:00`);
-      date.setDate(date.getDate() + i);
+    for (const selection of selectedRooms) {
+      totalRooms += selection.quantity;
+      capacity += selection.room.maxGuests * selection.quantity;
 
-      // Friday, Saturday and Sunday use weekend rates.
-      const day = date.getDay();
-      const isWeekend = day === 5 || day === 6 || day === 0;
-      const rate = isWeekend
-        ? selectedRoom.weekend
-        : selectedRoom.weekday;
+      for (let i = 0; i < nights; i++) {
+        const date = new Date(`${checkIn}T12:00:00`);
+        date.setDate(date.getDate() + i);
 
-      total += rate;
-      breakdown.push({
-        date: getLocalDate(date),
-        rate,
-      });
+        const day = date.getDay();
+        const isWeekend = day === 5 || day === 6 || day === 0;
+
+        const rate = isWeekend
+          ? selection.room.weekend
+          : selection.room.weekday;
+
+        total += rate * selection.quantity;
+
+        breakdown.push({
+          roomType: selection.room.name,
+          quantity: selection.quantity,
+          date: getLocalDate(date),
+          rate,
+          lineTotal: rate * selection.quantity,
+        });
+      }
     }
 
-    return { total, breakdown };
-  }, [selectedRoom, checkIn, nights]);
+    return { total, totalRooms, capacity, breakdown };
+  }, [roomSelections, checkIn, nights]);
+
+  const updateRoomSelection = (index, field, value) => {
+    setRoomSelections((current) =>
+      current.map((item, i) =>
+        i === index ? { ...item, [field]: value } : item
+      )
+    );
+    setError("");
+  };
+
+  const addRoomSelection = () => {
+    setRoomSelections((current) => [
+      ...current,
+      { roomType: "", quantity: 1 },
+    ]);
+    setError("");
+  };
+
+  const removeRoomSelection = (index) => {
+    setRoomSelections((current) =>
+      current.filter((_, i) => i !== index)
+    );
+    setError("");
+  };
 
   const handleCheckInChange = (value) => {
     setCheckIn(value);
@@ -103,13 +151,28 @@ const Reservation = () => {
     e.preventDefault();
     setError("");
 
-    if (!selectedRoom) {
-      setError("Please select a room.");
+    if (
+      !roomSelections.length ||
+      selectedRooms.some((item) => !item.room)
+    ) {
+      setError("Please select a room type for every room entry.");
+      return;
+    }
+
+    if (
+      roomSelections.some(
+        (item) =>
+          !Number.isInteger(Number(item.quantity)) ||
+          Number(item.quantity) < 1 ||
+          Number(item.quantity) > 20
+      )
+    ) {
+      setError("Each room quantity must be between 1 and 20.");
       return;
     }
 
     if (!checkIn || !checkOut || nights < 1) {
-      setError("Please select a valid check-in and check-out date.");
+      setError("Please select valid check-in and check-out dates.");
       return;
     }
 
@@ -118,9 +181,12 @@ const Reservation = () => {
       return;
     }
 
-    if (Number(guests) < 1 || Number(guests) > selectedRoom.maxGuests) {
+    if (
+      Number(guests) < 1 ||
+      Number(guests) > booking.capacity
+    ) {
       setError(
-        `This room accommodates up to ${selectedRoom.maxGuests} guests.`
+        `The selected rooms accommodate up to ${booking.capacity} guests in total.`
       );
       return;
     }
@@ -129,37 +195,52 @@ const Reservation = () => {
 
     const formData = new FormData(form.current);
 
+    const roomSummary = selectedRooms
+      .map(
+        (item) => `${item.room.name} × ${item.quantity}`
+      )
+      .join("; ");
+
+    const rateBreakdown = booking.breakdown
+      .map(
+        (night) =>
+          `${night.roomType} × ${night.quantity}, ${night.date}: ₦${night.rate.toLocaleString("en-NG")} per room (₦${night.lineTotal.toLocaleString("en-NG")} total)`
+      )
+      .join("\n");
+
     const templateParams = {
       full_name: formData.get("full_name"),
       email: formData.get("email"),
       phone: formData.get("phone"),
-      room_type: selectedRoom.name,
+      room_type: roomSummary,
+      room_breakdown: roomSummary,
+      total_rooms: booking.totalRooms,
       check_in: checkIn,
       check_out: checkOut,
       number_of_nights: nights,
       guests,
       special_requests: formData.get("special_requests"),
       estimated_total: `₦${booking.total.toLocaleString("en-NG")}`,
-      rate_breakdown: booking.breakdown
-        .map(
-          (night, index) =>
-            `${selectedRoom.name}, night ${index + 1} of ${nights}: ${night.date}: ₦${night.rate.toLocaleString("en-NG")}`
-        )
-        .join("\n"),
+      rate_breakdown: rateBreakdown,
     };
 
     try {
-      // Create the customer and draft invoice through the Cloudflare backend.
       const response = await fetch(
         "https://nexusxpresshotel-backend.macdot700.workers.dev/api/reservations",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({
             name: templateParams.full_name,
             email: templateParams.email,
             phone: templateParams.phone,
-            roomType: selectedRoom.name,
+            rooms: selectedRooms.map((item) => ({
+              roomType: item.room.name,
+              quantity: item.quantity,
+            })),
+            guests: Number(guests),
             checkIn,
             checkOut,
           }),
@@ -169,22 +250,29 @@ const Reservation = () => {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
+        console.error("Reservation backend error:", result);
         throw new Error(
-          result.message || "We couldn't submit your reservation request."
+          `${result.code || "UNKNOWN_ERROR"}: ${
+            result.message ||
+            "We couldn't submit your reservation request."
+          }`
         );
       }
 
-      // Keep existing notifications.
-      // Their failure must not trigger a second invoice submission.
-      for (const templateId of ["template_wneulen", "template_nk9h8z9"]) {
+      for (const templateId of [
+        "template_wneulen",
+        "template_nk9h8z9",
+      ]) {
         try {
           await emailjs.send(
             "service_wjrcah7",
             templateId,
             {
               ...templateParams,
-              zoho_invoice_number: result.invoice?.number || "",
-              zoho_invoice_status: result.invoice?.status || "Draft",
+              zoho_invoice_number:
+                result.invoice?.number || "",
+              zoho_invoice_status:
+                result.invoice?.status || "Draft",
             },
             "FHN_1Krva_7DZA4E9"
           );
@@ -215,11 +303,13 @@ const Reservation = () => {
           <p className="mb-3 inline-block bg-brand-lightBlue px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-brand-blue sm:text-sm">
             Reservations
           </p>
+
           <h1 className="font-display text-4xl font-semibold text-brand-deepBlue sm:text-5xl">
             Book Your Stay
           </h1>
+
           <p className="mx-auto mt-3 max-w-xl leading-7 text-brand-muted">
-            Choose your room and dates to request your stay at Nexus Xpress Hotel.
+            Choose your rooms and dates to request your stay at Nexus Xpress Hotel.
           </p>
         </div>
 
@@ -230,9 +320,13 @@ const Reservation = () => {
             className="space-y-5 border border-gray-100 p-5 shadow-sm sm:p-8"
           >
             <div>
-              <label className="mb-2 block text-sm font-semibold" htmlFor="full_name">
+              <label
+                className="mb-2 block text-sm font-semibold"
+                htmlFor="full_name"
+              >
                 Full Name
               </label>
+
               <input
                 id="full_name"
                 type="text"
@@ -245,9 +339,13 @@ const Reservation = () => {
 
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
-                <label className="mb-2 block text-sm font-semibold" htmlFor="email">
+                <label
+                  className="mb-2 block text-sm font-semibold"
+                  htmlFor="email"
+                >
                   Email Address
                 </label>
+
                 <input
                   id="email"
                   type="email"
@@ -259,9 +357,13 @@ const Reservation = () => {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-semibold" htmlFor="phone">
+                <label
+                  className="mb-2 block text-sm font-semibold"
+                  htmlFor="phone"
+                >
                   Phone Number
                 </label>
+
                 <input
                   id="phone"
                   type="tel"
@@ -273,59 +375,144 @@ const Reservation = () => {
               </div>
             </div>
 
-            <div>
-              <label className="mb-2 block text-sm font-semibold" htmlFor="room_type">
-                Room Type
-              </label>
-              <select
-                id="room_type"
-                name="room_type"
-                value={roomType}
-                onChange={(e) => {
-                  setRoomType(e.target.value);
-                  setGuests("1");
-                  setError("");
-                }}
-                required
-                className="w-full border border-gray-300 bg-white px-4 py-3 outline-none focus:border-brand-blue"
-              >
-                <option value="">Select a room</option>
-                {roomOptions.map((room) => (
-                  <option key={room.name} value={room.name}>
-                    {room.name}
-                  </option>
-                ))}
-              </select>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-sm font-semibold">
+                    Rooms Required
+                  </h2>
+                  <p className="mt-1 text-xs text-brand-muted">
+                    Add each room type and the number of rooms required.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={addRoomSelection}
+                  className="shrink-0 border border-brand-blue px-3 py-2 text-xs font-bold text-brand-blue hover:bg-brand-lightBlue"
+                >
+                  + Add Room
+                </button>
+              </div>
+
+              {roomSelections.map((selection, index) => (
+                <div
+                  key={index}
+                  className="grid gap-3 border border-gray-200 p-4 sm:grid-cols-[1fr_130px_auto] sm:items-end"
+                >
+                  <div>
+                    <label
+                      className="mb-2 block text-sm font-semibold"
+                      htmlFor={`room_type_${index}`}
+                    >
+                      Room Type {index + 1}
+                    </label>
+
+                    <select
+                      id={`room_type_${index}`}
+                      value={selection.roomType}
+                      onChange={(e) =>
+                        updateRoomSelection(
+                          index,
+                          "roomType",
+                          e.target.value
+                        )
+                      }
+                      required
+                      className="w-full border border-gray-300 bg-white px-4 py-3 outline-none focus:border-brand-blue"
+                    >
+                      <option value="">Select a room</option>
+                      {roomOptions.map((room) => (
+                        <option key={room.name} value={room.name}>
+                          {room.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      className="mb-2 block text-sm font-semibold"
+                      htmlFor={`room_quantity_${index}`}
+                    >
+                      Quantity
+                    </label>
+
+                    <input
+                      id={`room_quantity_${index}`}
+                      type="number"
+                      min="1"
+                      max="20"
+                      value={selection.quantity}
+                      onChange={(e) =>
+                        updateRoomSelection(
+                          index,
+                          "quantity",
+                          e.target.value
+                        )
+                      }
+                      required
+                      className="w-full border border-gray-300 px-4 py-3 outline-none focus:border-brand-blue"
+                    />
+                  </div>
+
+                  {roomSelections.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeRoomSelection(index)}
+                      className="px-3 py-3 text-sm font-semibold text-red-600 hover:bg-red-50"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+              ))}
             </div>
 
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
-                <label className="mb-2 block text-sm font-semibold" htmlFor="check_in">
+                <label
+                  className="mb-2 block text-sm font-semibold"
+                  htmlFor="check_in"
+                >
                   Check-in
                 </label>
+
                 <input
                   id="check_in"
                   type="date"
                   name="check_in"
                   value={checkIn}
                   min={getLocalDate()}
-                  onChange={(e) => handleCheckInChange(e.target.value)}
+                  onChange={(e) =>
+                    handleCheckInChange(e.target.value)
+                  }
                   required
                   className="w-full border border-gray-300 px-4 py-3 outline-none focus:border-brand-blue"
                 />
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-semibold" htmlFor="check_out">
+                <label
+                  className="mb-2 block text-sm font-semibold"
+                  htmlFor="check_out"
+                >
                   Check-out
                 </label>
+
                 <input
                   id="check_out"
                   type="date"
                   name="check_out"
                   value={checkOut}
-                  min={checkIn ? addDays(checkIn, 1) : addDays(getLocalDate(), 1)}
-                  onChange={(e) => handleCheckOutChange(e.target.value)}
+                  min={
+                    checkIn
+                      ? addDays(checkIn, 1)
+                      : addDays(getLocalDate(), 1)
+                  }
+                  onChange={(e) =>
+                    handleCheckOutChange(e.target.value)
+                  }
                   required
                   className="w-full border border-gray-300 px-4 py-3 outline-none focus:border-brand-blue"
                 />
@@ -334,9 +521,13 @@ const Reservation = () => {
 
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
-                <label className="mb-2 block text-sm font-semibold" htmlFor="guests">
+                <label
+                  className="mb-2 block text-sm font-semibold"
+                  htmlFor="guests"
+                >
                   Number of Guests
                 </label>
+
                 <select
                   id="guests"
                   name="guests"
@@ -346,7 +537,7 @@ const Reservation = () => {
                   className="w-full border border-gray-300 bg-white px-4 py-3 outline-none focus:border-brand-blue"
                 >
                   {Array.from(
-                    { length: selectedRoom?.maxGuests || 3 },
+                    { length: Math.max(booking.capacity, 3) },
                     (_, i) => i + 1
                   ).map((count) => (
                     <option key={count} value={count}>
@@ -357,9 +548,13 @@ const Reservation = () => {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-semibold" htmlFor="number_of_nights">
+                <label
+                  className="mb-2 block text-sm font-semibold"
+                  htmlFor="number_of_nights"
+                >
                   Number of Nights
                 </label>
+
                 <input
                   id="number_of_nights"
                   name="number_of_nights"
@@ -371,9 +566,13 @@ const Reservation = () => {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-semibold" htmlFor="special_requests">
+              <label
+                className="mb-2 block text-sm font-semibold"
+                htmlFor="special_requests"
+              >
                 Special Requests (Optional)
               </label>
+
               <textarea
                 id="special_requests"
                 name="special_requests"
@@ -383,7 +582,10 @@ const Reservation = () => {
             </div>
 
             {error && (
-              <p role="alert" className="bg-red-50 p-3 text-sm text-red-700">
+              <p
+                role="alert"
+                className="bg-red-50 p-3 text-sm text-red-700"
+              >
                 {error}
               </p>
             )}
@@ -397,8 +599,8 @@ const Reservation = () => {
             </button>
 
             <p className="text-xs leading-5 text-brand-muted">
-              This form sends a reservation request. Your stay is not confirmed
-              until the hotel confirms availability.
+              This form sends a reservation request. Your stay is not
+              confirmed until the hotel confirms availability.
             </p>
           </form>
 
@@ -411,18 +613,35 @@ const Reservation = () => {
               <div className="flex justify-between gap-4">
                 <span className="text-brand-muted">Room</span>
                 <span className="text-right font-semibold">
-                  {selectedRoom?.name || "Not selected"}
+                  {selectedRooms
+                    .filter((item) => item.room)
+                    .map(
+                      (item) =>
+                        `${item.room.name} × ${item.quantity}`
+                    )
+                    .join(", ") || "Not selected"}
                 </span>
               </div>
 
               <div className="flex justify-between gap-4">
                 <span className="text-brand-muted">Check-in</span>
-                <span className="text-right font-semibold">{checkIn || "Select date"}</span>
+                <span className="text-right font-semibold">
+                  {checkIn || "Select date"}
+                </span>
               </div>
 
               <div className="flex justify-between gap-4">
                 <span className="text-brand-muted">Check-out</span>
-                <span className="text-right font-semibold">{checkOut || "Select date"}</span>
+                <span className="text-right font-semibold">
+                  {checkOut || "Select date"}
+                </span>
+              </div>
+
+              <div className="flex justify-between gap-4">
+                <span className="text-brand-muted">Rooms requested</span>
+                <span className="font-semibold">
+                  {booking.totalRooms}
+                </span>
               </div>
 
               <div className="flex justify-between gap-4">
@@ -437,14 +656,18 @@ const Reservation = () => {
             </div>
 
             <div className="mt-6 border-t border-brand-blue/20 pt-5">
-              <p className="text-sm text-brand-muted">Estimated room total</p>
+              <p className="text-sm text-brand-muted">
+                Estimated room total
+              </p>
+
               <p className="mt-1 text-3xl font-bold text-brand-deepBlue">
                 ₦{booking.total.toLocaleString("en-NG")}
               </p>
+
               <p className="mt-2 text-xs leading-5 text-brand-muted">
-                Weekday rates apply Monday to Thursday. Weekend rates apply
-                Friday to Sunday. The estimate covers room charges only and
-                is subject to availability and hotel confirmation.
+                Weekday rates apply Monday to Thursday. Weekend rates
+                apply Friday to Sunday. The estimate covers room charges
+                only and is subject to availability and hotel confirmation.
               </p>
             </div>
           </aside>

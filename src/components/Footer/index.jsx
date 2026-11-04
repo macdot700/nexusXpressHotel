@@ -1,3 +1,4 @@
+
 import Instagram from "../Icons/Instagram";
 import Twitter from "../Icons/Twitter";
 import Logo from "../../assets/images/logo2.jpg";
@@ -11,7 +12,6 @@ const Footer = () => {
   return (
     <footer className="bg-blue-1 px-4 pt-6 pb-3 text-white md:pt-7 md:pb-4">
       <div className="mx-auto w-full max-w-[1990px] px-4 sm:px-10 lg:px-12">
-
         <div className="grid gap-8 md:grid-cols-3 md:gap-8 lg:gap-14">
 
           {/* Hotel */}
@@ -58,6 +58,15 @@ const Footer = () => {
                   Privacy Policy
                 </NavLink>
               </li>
+
+              <li>
+                <NavLink
+                  to="/hotel-policies"
+                  className="transition-colors duration-300 hover:text-white"
+                >
+                  Hotel Policies & House Rules
+                </NavLink>
+              </li>
             </ul>
           </div>
 
@@ -77,8 +86,10 @@ const Footer = () => {
                   height="15"
                   className="mt-1 shrink-0"
                 />
+
                 <span>
-                  Plot 454, Cadastral Zone 07-07, Okada Bridge Road, Phase 1, FHA, Lugbe, Abuja, Nigeria.
+                  Plot 454, Cadastral Zone 07-07, Okada Bridge Road, Phase 1,
+                  FHA, Lugbe, Abuja, Nigeria.
                 </span>
               </p>
 
@@ -93,6 +104,7 @@ const Footer = () => {
                   height="15"
                   className="shrink-0"
                 />
+
                 <span>+234 806 779 2621</span>
               </a>
 
@@ -107,6 +119,7 @@ const Footer = () => {
                   height="15"
                   className="shrink-0"
                 />
+
                 <span>nexusxpresshotel@gmail.com</span>
               </a>
 
@@ -132,7 +145,6 @@ const Footer = () => {
 
             </div>
           </div>
-
         </div>
 
         <div className="mt-5 border-t border-white/10 pt-3">
@@ -140,7 +152,6 @@ const Footer = () => {
             © {new Date().getFullYear()} Nexus Xpress Hotel. All rights reserved.
           </p>
         </div>
-
       </div>
     </footer>
   );

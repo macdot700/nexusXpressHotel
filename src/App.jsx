@@ -1,16 +1,27 @@
+
 import { useEffect } from "react";
-import { useNavigate, Routes, Route } from "react-router-dom"; // ⛔ removed HashRouter
+import { useNavigate, Routes, Route } from "react-router-dom";
 import "./App.css";
+
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
 import Footer from "./components/Footer";
 import Accommodation from "./pages/Accommodation";
 import Room from "./pages/Accommodation/Room";
+
 import standardRoom from "./assets/images/standardRoom.jpg";
 import superiorRoom from "./assets/images/superiorRoom.jpg";
 import deluxeRoom from "./assets/images/deluxeRoom.jpg";
 import executiveRoom from "./assets/images/executiveRoom.jpg";
+
+import ContactUs from "./pages/ContactUs";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import HotelPolicies from "./pages/HotelPolicies";
+import NotFound from "./pages/NotFound";
+import Reservation from "./pages/Reservation";
+import ThankYouPage from "./pages/ThankYouPage";
+
 const standardRoomGallery = [
   "/rooms/standard/Standard_Room_01.jpg",
   "/rooms/standard/Standard_Room_02.jpg",
@@ -72,19 +83,14 @@ const suiteGallery = [
   "/rooms/suite/Suite_09.jpg",
   "/rooms/suite/Suite_10.jpg",
 ];
-import ContactUs from "./pages/ContactUs";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import NotFound from "./pages/NotFound";
-import Reservation from "./pages/Reservation";
-import ThankYouPage from "./pages/ThankYouPage";
 
-// RedirectHandler (still okay to leave if needed)
 function RedirectHandler() {
   const navigate = useNavigate();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const redirectPath = params.get("redirect");
+
     if (redirectPath) {
       navigate(redirectPath);
     }
@@ -244,13 +250,18 @@ function App() {
   return (
     <>
       <RedirectHandler />
+
       <Navbar />
+
       <Routes>
-  <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />} />
 
-  <Route path="/accommodation" element={<Accommodation />} />
+        <Route
+          path="/accommodation"
+          element={<Accommodation />}
+        />
 
-  {rooms.map((route, idx) => (
+        {rooms.map((route, idx) => (
           <Route
             key={idx}
             path={route.path}
@@ -259,30 +270,51 @@ function App() {
                 title={route.title}
                 children={
                   <Room
-  title={route.title}
-  description={route.description}
-  weekdayPrice={route.weekdayPrice}
-  weekendPrice={route.weekendPrice}
-  img={route.img}
-  roomSize={route.roomSize}
-  livingRoom={route.livingRoom}
-  bed={route.bed}
-  guests={route.guests}
-  amenities={route.amenities}
-  gallery={route.gallery}
-/>
+                    title={route.title}
+                    description={route.description}
+                    weekdayPrice={route.weekdayPrice}
+                    weekendPrice={route.weekendPrice}
+                    img={route.img}
+                    roomSize={route.roomSize}
+                    livingRoom={route.livingRoom}
+                    bed={route.bed}
+                    guests={route.guests}
+                    amenities={route.amenities}
+                    gallery={route.gallery}
+                  />
                 }
               />
             }
           />
         ))}
+
         <Route path="/about-us" element={<AboutUs />} />
+
         <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/privacy_policy" element={<PrivacyPolicy />} />
-        <Route path="/reservation" element={<Reservation />} />
-        <Route path="/thank-you" element={<ThankYouPage />} />
+
+        <Route
+          path="/privacy_policy"
+          element={<PrivacyPolicy />}
+        />
+
+        <Route
+          path="/hotel-policies"
+          element={<HotelPolicies />}
+        />
+
+        <Route
+          path="/reservation"
+          element={<Reservation />}
+        />
+
+        <Route
+          path="/thank-you"
+          element={<ThankYouPage />}
+        />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
+
       <Footer />
     </>
   );

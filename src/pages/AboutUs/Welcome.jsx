@@ -1,5 +1,6 @@
+
 import Container from "../../components/Container";
-import welcomeImg from "../../assets/images/welcome.jpg";
+import welcomeImg from "../../assets/images/reception.png";
 
 const Welcome = () => {
   return (
@@ -28,25 +29,26 @@ const Welcome = () => {
             </h2>
 
             <p className="mt-6 text-base leading-8 text-brand-muted md:text-lg">
-              Nexus Xpress Hotel was created with a simple idea: a hotel stay
-              should be comfortable, welcoming and convenient. From the moment
-              you arrive, our aim is to provide a relaxed environment where
-              guests can settle in and feel at ease.
+              Since opening in February 2024, Nexus Xpress Hotel has welcomed
+              guests looking for a comfortable place to stay in Abuja. Whether
+              you're visiting for business, travelling with family or simply
+              passing through the city, we want you to feel at home from the
+              moment you arrive.
             </p>
 
             <p className="mt-5 text-base leading-8 text-brand-muted md:text-lg">
-              Located in Federal Housing Authority, Lugbe, the hotel offers
-              convenient access to the expressway, the airport and major routes
-              into Abuja. This makes Nexus a practical choice for guests
-              visiting Abuja, travelling through the city or looking for a
-              comfortable place to stay.
+              One of the things that makes our location special is our
+              proximity to the Airport Expressway. Situated in Lugbe, Abuja,
+              just by the expressway, the hotel offers convenient access to
+              the airport and major routes into the city.
             </p>
 
             <p className="mt-5 text-base leading-8 text-brand-muted md:text-lg">
-              At the heart of our approach is warm hospitality. We believe
-              good service is about paying attention to the details, creating
-              a welcoming atmosphere and giving every guest a comfortable
-              place to return to.
+              We believe a good hotel stay is about more than having a room
+              to sleep in. It's also about being welcomed, receiving good
+              service and having a comfortable place to return to at the end
+              of the day. This is what we strive to offer every guest at
+              Nexus Xpress Hotel.
             </p>
 
           </div>
