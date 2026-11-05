@@ -1,32 +1,58 @@
+import { NavLink } from "react-router-dom";
 import Container from "../../components/Container";
-import welcomeImg from "../../assets/images/welcome.jpg";
-import arrow from "../../assets/images/arrow.jpeg";
 
 const Welcome = () => {
   return (
-    <div className="bg-grey-1 w-full">
-      <Container className="grid grid-cols-1 md:grid-cols-2 gap-10 py-[50px]">
-        <div className="">
-          <img src={welcomeImg} className="w-full"/>
-        </div>
-        {/* <div className="flex justify-center items-start">
-          <img src={arrow} alt="" width={100} className="rotate-90 md:rotate-0"/>
-        </div> */}
-        <div className="font-opensans flex flex-col gap-5">
-        <p  className="">
-          {/* Welcome to */}
-           <span className="text-2xl md:text-[2rem] font-semibold font-lato">Nexus Hotel,</span> <span className="text-opensans ">Your Home Away From Home! Discover a world of
-          luxury, comfort, and impeccable service at Nexus Hotel. Nestled in the
-          heart of Abuja, our hotel offers a perfect blend of sophistication and
-          warmth, making it an ideal choice for both business and leisure
-          travelers. </span>
-        </p>
-        <p className="">
-        Take advantage of our prime location to explore the vibrant surroundings of Abuja. Our concierge team is here to help you plan exciting excursions, recommend local attractions, and ensure that your stay is filled with memorable experiences.
-        </p>
+    <section className="bg-white pb-8 pt-16 md:pb-10 md:pt-20 lg:pb-12 lg:pt-24">
+      <Container>
+        <div className="grid items-stretch gap-8 lg:grid-cols-2 lg:gap-12">
+
+          {/* Image */}
+          <div className="overflow-hidden">
+            <img
+              src="/src/assets/images/welcome.jpg"
+              alt="Welcome to Nexus Xpress Hotel"
+              className="h-[340px] w-full object-cover sm:h-[380px] lg:h-full lg:min-h-[500px]"
+            />
+          </div>
+
+          {/* Content */}
+          <div className="flex flex-col justify-center">
+
+            <p className="mb-4 inline-block w-fit bg-brand-lightBlue px-3 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-brand-deepBlue md:text-sm">
+              Welcome to Nexus Xpress Hotel
+            </p>
+
+            <h2 className="max-w-xl font-display text-4xl font-semibold leading-tight text-brand-deepBlue sm:text-5xl md:text-6xl">
+              A Comfortable Stay, A Warm Welcome
+            </h2>
+
+            <p className="mt-5 text-base leading-8 text-brand-muted md:text-lg">
+              At Nexus Xpress Hotel, we believe a good stay should feel
+              comfortable from the moment you arrive. Our hotel offers a
+              relaxed environment, well furnished rooms and warm hospitality
+              for both short visits and extended stays.
+            </p>
+
+            <p className="mt-4 text-base leading-8 text-brand-muted md:text-lg">
+              Conveniently located just minutes from the expressway, we offer
+              easy access to the airport and Abuja city centre, keeping you well connected to key destinations.
+            </p>
+
+            <div className="mt-7">
+              <NavLink
+                to="/about-us"
+                className="inline-flex items-center bg-brand-deepBlue px-7 py-3.5 text-sm font-bold uppercase tracking-widest text-white transition-colors duration-300 hover:bg-brand-blue"
+              >
+                Discover Nexus
+              </NavLink>
+            </div>
+
+          </div>
+
         </div>
       </Container>
-    </div>
+    </section>
   );
 };
 

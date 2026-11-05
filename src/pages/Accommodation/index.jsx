@@ -1,4 +1,5 @@
-import { useEffect } from "react"
+
+import { useEffect } from "react";
 
 import HeroSection from "./HeroSection";
 import standardRoom from "../../assets/images/standardRoom.jpg";
@@ -40,30 +41,76 @@ const rooms = [
     weekendPrice: "43,000",
   },
 ];
+
 const Accommodation = ({ children, title }) => {
-  useEffect(()=>{
-    window.scroll(0, 0)
-}, [])
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const isRoomPage = Boolean(title);
+
   return (
     <div>
       <HeroSection />
-      <div className="py-20">
-        {children}
-        <p className="text-lg  max-w-[750px] text-center mt-[100px] m-auto">
-          Secure your accommodation today and indulge in a realm of unmatched
-          hospitality. We eagerly anticipate hosting you at Nexus Xpress Hotel,
-          your "home away from home." Our team comprises some of the most
-          welcoming individuals dedicated to ensuring your comfort during your
-          stay with us.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-10 max-w-[1990px] px-4 sm:px-10 lg:px-[48px] m-auto">
-          {rooms.map((room, idx) => {
-            return room.title !== title ? (
-              <RoomCard key={idx} {...room} link={routeConverter(room.title)} />
-            ) : null;
-          })}
+
+      {isRoomPage ? (
+        <div className="py-10 md:py-14 lg:py-16">
+          {children}
+
+          <div className="mx-auto mt-10 grid max-w-[1990px] grid-cols-1 gap-6 px-4 sm:px-10 md:grid-cols-2 lg:grid-cols-4 lg:px-12">
+            {rooms.map((room) => {
+              if (room.title === title) return null;
+
+              return (
+                <RoomCard
+                  key={room.title}
+                  {...room}
+                  link={`/accommodation/${routeConverter(room.title)}`}
+                />
+              );
+            })}
+          </div>
         </div>
-      </div>
+      ) : (
+        <section className="bg-white py-12 md:py-16 lg:py-20">
+          <div className="mx-auto max-w-[1990px] px-4 sm:px-10 lg:px-12">
+            <div className="mx-auto max-w-3xl text-center">
+              <p className="mb-4 inline-block bg-brand-lightBlue px-4 py-2 text-sm font-bold uppercase tracking-[0.2em] text-brand-blue">
+                Find Your Room
+              </p>
+
+              <h2 className="font-display text-4xl font-semibold leading-tight text-brand-deepBlue sm:text-5xl md:text-6xl">
+                Comfort for Every Stay
+              </h2>
+
+              <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-brand-muted md:text-lg">
+                Choose from our range of comfortable rooms, each designed to
+                give you a relaxing stay with the essential amenities you need.
+              </p>
+            </div>
+
+            <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-6 lg:gap-8">
+              {rooms.map((room, index) => (
+                <div
+                  key={room.title}
+                  className={`lg:col-span-2 ${
+                    index === 3
+                      ? "lg:col-start-2"
+                      : index === 4
+                      ? "lg:col-start-4"
+                      : ""
+                  }`}
+                >
+                  <RoomCard
+                    {...room}
+                    link={`/accommodation/${routeConverter(room.title)}`}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 };

@@ -1,194 +1,679 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+
+const roomOptions = [
+  { name: "Standard Room", weekday: 28000, weekend: 25000, maxGuests: 2 },
+  { name: "Superior Room", weekday: 33000, weekend: 30000, maxGuests: 2 },
+  { name: "Deluxe Room", weekday: 38000, weekend: 35000, maxGuests: 2 },
+  { name: "Executive Room", weekday: 43000, weekend: 40000, maxGuests: 2 },
+  { name: "Nexus Suite", weekday: 45000, weekend: 43000, maxGuests: 3 },
+];
+
+const getLocalDate = (date = new Date()) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+const addDays = (dateString, days) => {
+  const date = new Date(`${dateString}T12:00:00`);
+  date.setDate(date.getDate() + days);
+  return getLocalDate(date);
+};
 
 const Reservation = () => {
-  const form = useRef();
+  const form = useRef(null);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [nights, setNights] = useState(1);
+  const [searchParams] = useSearchParams();
 
-  const calculateNights = (checkIn, checkOut) => {
-    const inDate = new Date(checkIn);
-    const outDate = new Date(checkOut);
-    const diffTime = outDate - inDate;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays > 0 ? diffDays : 1;
+  const requestedRoom = searchParams.get("room") || "";
+  const initialRoom = roomOptions.some(
+    (room) => room.name === requestedRoom
+  )
+    ? requestedRoom
+    : "";
+
+  const [loading, setLoading] = useState(false);
+  const [roomSelections, setRoomSelections] = useState([
+    { roomType: initialRoom, quantity: 1 },
+  ]);
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
+  const [guests, setGuests] = useState("1");
+  const [error, setError] = useState("");
+
+  const selectedRooms = roomSelections.map((selection) => ({
+    ...selection,
+    room: roomOptions.find(
+      (room) => room.name === selection.roomType
+    ),
+    quantity: Math.max(1, Number(selection.quantity) || 1),
+  }));
+
+  const nights = useMemo(() => {
+    if (!checkIn || !checkOut || checkOut <= checkIn) return 0;
+
+    const start = new Date(`${checkIn}T12:00:00`);
+    const end = new Date(`${checkOut}T12:00:00`);
+
+    return Math.round(
+      (end - start) / (1000 * 60 * 60 * 24)
+    );
+  }, [checkIn, checkOut]);
+
+  const booking = useMemo(() => {
+    if (!nights || selectedRooms.some((item) => !item.room)) {
+      return {
+        total: 0,
+        totalRooms: 0,
+        capacity: 0,
+        breakdown: [],
+      };
+    }
+
+    const breakdown = [];
+    let total = 0;
+    let totalRooms = 0;
+    let capacity = 0;
+
+    for (const selection of selectedRooms) {
+      totalRooms += selection.quantity;
+      capacity += selection.room.maxGuests * selection.quantity;
+
+      for (let i = 0; i < nights; i++) {
+        const date = new Date(`${checkIn}T12:00:00`);
+        date.setDate(date.getDate() + i);
+
+        const day = date.getDay();
+        const isWeekend = day === 5 || day === 6 || day === 0;
+
+        const rate = isWeekend
+          ? selection.room.weekend
+          : selection.room.weekday;
+
+        total += rate * selection.quantity;
+
+        breakdown.push({
+          roomType: selection.room.name,
+          quantity: selection.quantity,
+          date: getLocalDate(date),
+          rate,
+          lineTotal: rate * selection.quantity,
+        });
+      }
+    }
+
+    return { total, totalRooms, capacity, breakdown };
+  }, [roomSelections, checkIn, nights]);
+
+  const updateRoomSelection = (index, field, value) => {
+    setRoomSelections((current) =>
+      current.map((item, i) =>
+        i === index ? { ...item, [field]: value } : item
+      )
+    );
+    setError("");
   };
 
-  const handleDateChange = () => {
-    const formData = new FormData(form.current);
-    const checkIn = formData.get("check_in");
-    const checkOut = formData.get("check_out");
+  const addRoomSelection = () => {
+    setRoomSelections((current) => [
+      ...current,
+      { roomType: "", quantity: 1 },
+    ]);
+    setError("");
+  };
 
-    if (checkIn && checkOut) {
-      const calculated = calculateNights(checkIn, checkOut);
-      setNights(calculated);
+  const removeRoomSelection = (index) => {
+    setRoomSelections((current) =>
+      current.filter((_, i) => i !== index)
+    );
+    setError("");
+  };
+
+  const handleCheckInChange = (value) => {
+    setCheckIn(value);
+
+    if (checkOut && value && checkOut <= value) {
+      setCheckOut("");
     }
+
+    setError("");
+  };
+
+  const handleCheckOutChange = (value) => {
+    setCheckOut(value);
+    setError("");
   };
 
   const sendEmail = async (e) => {
     e.preventDefault();
+    setError("");
+
+    if (
+      !roomSelections.length ||
+      selectedRooms.some((item) => !item.room)
+    ) {
+      setError("Please select a room type for every room entry.");
+      return;
+    }
+
+    if (
+      roomSelections.some(
+        (item) =>
+          !Number.isInteger(Number(item.quantity)) ||
+          Number(item.quantity) < 1 ||
+          Number(item.quantity) > 20
+      )
+    ) {
+      setError("Each room quantity must be between 1 and 20.");
+      return;
+    }
+
+    if (!checkIn || !checkOut || nights < 1) {
+      setError("Please select valid check-in and check-out dates.");
+      return;
+    }
+
+    if (checkIn < getLocalDate()) {
+      setError("Check-in cannot be in the past.");
+      return;
+    }
+
+    if (
+      Number(guests) < 1 ||
+      Number(guests) > booking.capacity
+    ) {
+      setError(
+        `The selected rooms accommodate up to ${booking.capacity} guests in total.`
+      );
+      return;
+    }
+
     setLoading(true);
 
     const formData = new FormData(form.current);
+
+    const roomSummary = selectedRooms
+      .map(
+        (item) => `${item.room.name} × ${item.quantity}`
+      )
+      .join("; ");
+
+    const rateBreakdown = booking.breakdown
+      .map(
+        (night) =>
+          `${night.roomType} × ${night.quantity}, ${night.date}: ₦${night.rate.toLocaleString("en-NG")} per room (₦${night.lineTotal.toLocaleString("en-NG")} total)`
+      )
+      .join("\n");
+
     const templateParams = {
       full_name: formData.get("full_name"),
       email: formData.get("email"),
       phone: formData.get("phone"),
-      room_type: formData.get("room_type"),
-      check_in: formData.get("check_in"),
-      check_out: formData.get("check_out"),
+      room_type: roomSummary,
+      room_breakdown: roomSummary,
+      total_rooms: booking.totalRooms,
+      check_in: checkIn,
+      check_out: checkOut,
       number_of_nights: nights,
-      guests: formData.get("guests"),
+      guests,
       special_requests: formData.get("special_requests"),
+      estimated_total: `₦${booking.total.toLocaleString("en-NG")}`,
+      rate_breakdown: rateBreakdown,
     };
 
     try {
-      // Send to guest
-      await emailjs.send(
-        "service_wjrcah7",
-        "template_wneulen", // guest template
-        templateParams,
-        "FHN_1Krva_7DZA4E9"
+      const response = await fetch(
+        "https://nexusxpresshotel-backend.macdot700.workers.dev/api/reservations",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: templateParams.full_name,
+            email: templateParams.email,
+            phone: templateParams.phone,
+            rooms: selectedRooms.map((item) => ({
+              roomType: item.room.name,
+              quantity: item.quantity,
+            })),
+            guests: Number(guests),
+            checkIn,
+            checkOut,
+          }),
+        }
       );
 
-      // Send to hotel
-      await emailjs.send(
-        "service_wjrcah7",
-        "template_nk9h8z9", // hotel notification template
-        templateParams,
-        "FHN_1Krva_7DZA4E9"
-      );
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        console.error("Reservation backend error:", result);
+        throw new Error(
+          `${result.code || "UNKNOWN_ERROR"}: ${
+            result.message ||
+            "We couldn't submit your reservation request."
+          }`
+        );
+      }
+
+      for (const templateId of [
+        "template_wneulen",
+        "template_nk9h8z9",
+      ]) {
+        try {
+          await emailjs.send(
+            "service_wjrcah7",
+            templateId,
+            {
+              ...templateParams,
+              zoho_invoice_number:
+                result.invoice?.number || "",
+              zoho_invoice_status:
+                result.invoice?.status || "Draft",
+            },
+            "FHN_1Krva_7DZA4E9"
+          );
+        } catch (emailError) {
+          console.error(
+            `EmailJS notification failed (${templateId}):`,
+            emailError
+          );
+        }
+      }
 
       navigate("/thank-you");
     } catch (error) {
-      console.error("EmailJS error:", error);
-      alert("Something went wrong: " + (error?.text || "Please try again."));
+      console.error("Reservation submission failed:", error);
+      setError(
+        error.message ||
+          "We couldn't submit your reservation request. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-white text-black font-opensans min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto bg-grey-1 shadow-md rounded-lg p-8">
-        <h2 className="text-3xl font-bold text-primary-blue mb-6 text-center">
-          Book a Room
-        </h2>
-        <form ref={form} onSubmit={sendEmail} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium mb-1">Full Name</label>
-            <input
-              type="text"
-              name="full_name"
-              required
-              className="w-full px-4 py-2 border rounded-md"
-            />
-          </div>
+    <section className="min-h-screen bg-white px-4 py-10 text-brand-text sm:px-6 lg:px-8 lg:py-14">
+      <div className="mx-auto max-w-5xl">
+        <div className="mb-8 text-center">
+          <p className="mb-3 inline-block bg-brand-lightBlue px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-brand-blue sm:text-sm">
+            Reservations
+          </p>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Email Address</label>
-            <input
-              type="email"
-              name="email"
-              required
-              className="w-full px-4 py-2 border rounded-md"
-            />
-          </div>
+          <h1 className="font-display text-4xl font-semibold text-brand-deepBlue sm:text-5xl">
+            Book Your Stay
+          </h1>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Phone Number</label>
-            <input
-              type="tel"
-              name="phone"
-              required
-              className="w-full px-4 py-2 border rounded-md"
-            />
-          </div>
+          <p className="mx-auto mt-3 max-w-xl leading-7 text-brand-muted">
+            Choose your rooms and dates to request your stay at Nexus Xpress Hotel.
+          </p>
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Room Type</label>
-            <select
-              name="room_type"
-              required
-              className="w-full px-4 py-2 border rounded-md"
-            >
-              <option value="">Select a room</option>
-              <option value="Standard Room">Standard Room</option>
-              <option value="Superior Room">Superior Room</option>
-              <option value="Deluxe Room">Deluxe Room</option>
-              <option value="Executive Room">Executive Room</option>
-              <option value="Suite">Nexus Suite</option>
-            </select>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
+          <form
+            ref={form}
+            onSubmit={sendEmail}
+            className="space-y-5 border border-gray-100 p-5 shadow-sm sm:p-8"
+          >
             <div>
-              <label className="block text-sm font-medium mb-1">Check-in</label>
+              <label
+                className="mb-2 block text-sm font-semibold"
+                htmlFor="full_name"
+              >
+                Full Name
+              </label>
+
               <input
-                type="date"
-                name="check_in"
+                id="full_name"
+                type="text"
+                name="full_name"
+                autoComplete="name"
                 required
-                onChange={handleDateChange}
-                className="w-full px-4 py-2 border rounded-md"
+                className="w-full border border-gray-300 px-4 py-3 outline-none focus:border-brand-blue"
               />
             </div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label
+                  className="mb-2 block text-sm font-semibold"
+                  htmlFor="email"
+                >
+                  Email Address
+                </label>
+
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  required
+                  className="w-full border border-gray-300 px-4 py-3 outline-none focus:border-brand-blue"
+                />
+              </div>
+
+              <div>
+                <label
+                  className="mb-2 block text-sm font-semibold"
+                  htmlFor="phone"
+                >
+                  Phone Number
+                </label>
+
+                <input
+                  id="phone"
+                  type="tel"
+                  name="phone"
+                  autoComplete="tel"
+                  required
+                  className="w-full border border-gray-300 px-4 py-3 outline-none focus:border-brand-blue"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-sm font-semibold">
+                    Rooms Required
+                  </h2>
+                  <p className="mt-1 text-xs text-brand-muted">
+                    Add each room type and the number of rooms required.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={addRoomSelection}
+                  className="shrink-0 border border-brand-blue px-3 py-2 text-xs font-bold text-brand-blue hover:bg-brand-lightBlue"
+                >
+                  + Add Room
+                </button>
+              </div>
+
+              {roomSelections.map((selection, index) => (
+                <div
+                  key={index}
+                  className="grid gap-3 border border-gray-200 p-4 sm:grid-cols-[1fr_130px_auto] sm:items-end"
+                >
+                  <div>
+                    <label
+                      className="mb-2 block text-sm font-semibold"
+                      htmlFor={`room_type_${index}`}
+                    >
+                      Room Type {index + 1}
+                    </label>
+
+                    <select
+                      id={`room_type_${index}`}
+                      value={selection.roomType}
+                      onChange={(e) =>
+                        updateRoomSelection(
+                          index,
+                          "roomType",
+                          e.target.value
+                        )
+                      }
+                      required
+                      className="w-full border border-gray-300 bg-white px-4 py-3 outline-none focus:border-brand-blue"
+                    >
+                      <option value="">Select a room</option>
+                      {roomOptions.map((room) => (
+                        <option key={room.name} value={room.name}>
+                          {room.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      className="mb-2 block text-sm font-semibold"
+                      htmlFor={`room_quantity_${index}`}
+                    >
+                      Quantity
+                    </label>
+
+                    <input
+                      id={`room_quantity_${index}`}
+                      type="number"
+                      min="1"
+                      max="20"
+                      value={selection.quantity}
+                      onChange={(e) =>
+                        updateRoomSelection(
+                          index,
+                          "quantity",
+                          e.target.value
+                        )
+                      }
+                      required
+                      className="w-full border border-gray-300 px-4 py-3 outline-none focus:border-brand-blue"
+                    />
+                  </div>
+
+                  {roomSelections.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeRoomSelection(index)}
+                      className="px-3 py-3 text-sm font-semibold text-red-600 hover:bg-red-50"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label
+                  className="mb-2 block text-sm font-semibold"
+                  htmlFor="check_in"
+                >
+                  Check-in
+                </label>
+
+                <input
+                  id="check_in"
+                  type="date"
+                  name="check_in"
+                  value={checkIn}
+                  min={getLocalDate()}
+                  onChange={(e) =>
+                    handleCheckInChange(e.target.value)
+                  }
+                  required
+                  className="w-full border border-gray-300 px-4 py-3 outline-none focus:border-brand-blue"
+                />
+              </div>
+
+              <div>
+                <label
+                  className="mb-2 block text-sm font-semibold"
+                  htmlFor="check_out"
+                >
+                  Check-out
+                </label>
+
+                <input
+                  id="check_out"
+                  type="date"
+                  name="check_out"
+                  value={checkOut}
+                  min={
+                    checkIn
+                      ? addDays(checkIn, 1)
+                      : addDays(getLocalDate(), 1)
+                  }
+                  onChange={(e) =>
+                    handleCheckOutChange(e.target.value)
+                  }
+                  required
+                  className="w-full border border-gray-300 px-4 py-3 outline-none focus:border-brand-blue"
+                />
+              </div>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label
+                  className="mb-2 block text-sm font-semibold"
+                  htmlFor="guests"
+                >
+                  Number of Guests
+                </label>
+
+                <select
+                  id="guests"
+                  name="guests"
+                  value={guests}
+                  onChange={(e) => setGuests(e.target.value)}
+                  required
+                  className="w-full border border-gray-300 bg-white px-4 py-3 outline-none focus:border-brand-blue"
+                >
+                  {Array.from(
+                    { length: Math.max(booking.capacity, 3) },
+                    (_, i) => i + 1
+                  ).map((count) => (
+                    <option key={count} value={count}>
+                      {count} {count === 1 ? "guest" : "guests"}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label
+                  className="mb-2 block text-sm font-semibold"
+                  htmlFor="number_of_nights"
+                >
+                  Number of Nights
+                </label>
+
+                <input
+                  id="number_of_nights"
+                  name="number_of_nights"
+                  value={nights}
+                  readOnly
+                  className="w-full border border-gray-200 bg-gray-100 px-4 py-3"
+                />
+              </div>
+            </div>
+
             <div>
-              <label className="block text-sm font-medium mb-1">Check-out</label>
-              <input
-                type="date"
-                name="check_out"
-                required
-                onChange={handleDateChange}
-                className="w-full px-4 py-2 border rounded-md"
+              <label
+                className="mb-2 block text-sm font-semibold"
+                htmlFor="special_requests"
+              >
+                Special Requests (Optional)
+              </label>
+
+              <textarea
+                id="special_requests"
+                name="special_requests"
+                rows={3}
+                className="w-full border border-gray-300 px-4 py-3 outline-none focus:border-brand-blue"
               />
             </div>
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Number of Nights</label>
-            <input
-              type="number"
-              name="number_of_nights"
-              value={nights}
-              readOnly
-              className="w-full px-4 py-2 border rounded-md bg-gray-100"
-            />
-          </div>
+            {error && (
+              <p
+                role="alert"
+                className="bg-red-50 p-3 text-sm text-red-700"
+              >
+                {error}
+              </p>
+            )}
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Number of Guests</label>
-            <input
-              type="number"
-              name="guests"
-              required
-              min="1"
-              className="w-full px-4 py-2 border rounded-md"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Special Requests</label>
-            <textarea
-              name="special_requests"
-              rows="3"
-              className="w-full px-4 py-2 border rounded-md"
-            ></textarea>
-          </div>
-
-          <div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary-blue text-white py-3 rounded-md hover:bg-blue-700 transition duration-200"
+              className="w-full bg-brand-blue px-6 py-4 text-sm font-bold uppercase tracking-widest text-white transition-colors hover:bg-brand-deepBlue disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? "Sending..." : "Reserve Now"}
+              {loading ? "Submitting..." : "Request Reservation"}
             </button>
-          </div>
-        </form>
+
+            <p className="text-xs leading-5 text-brand-muted">
+              This form sends a reservation request. Your stay is not
+              confirmed until the hotel confirms availability.
+            </p>
+          </form>
+
+          <aside className="h-fit border border-gray-100 bg-brand-lightBlue p-6 lg:sticky lg:top-24">
+            <h2 className="font-display text-2xl font-semibold text-brand-deepBlue">
+              Booking Summary
+            </h2>
+
+            <div className="mt-5 space-y-4 text-sm">
+              <div className="flex justify-between gap-4">
+                <span className="text-brand-muted">Room</span>
+                <span className="text-right font-semibold">
+                  {selectedRooms
+                    .filter((item) => item.room)
+                    .map(
+                      (item) =>
+                        `${item.room.name} × ${item.quantity}`
+                    )
+                    .join(", ") || "Not selected"}
+                </span>
+              </div>
+
+              <div className="flex justify-between gap-4">
+                <span className="text-brand-muted">Check-in</span>
+                <span className="text-right font-semibold">
+                  {checkIn || "Select date"}
+                </span>
+              </div>
+
+              <div className="flex justify-between gap-4">
+                <span className="text-brand-muted">Check-out</span>
+                <span className="text-right font-semibold">
+                  {checkOut || "Select date"}
+                </span>
+              </div>
+
+              <div className="flex justify-between gap-4">
+                <span className="text-brand-muted">Rooms requested</span>
+                <span className="font-semibold">
+                  {booking.totalRooms}
+                </span>
+              </div>
+
+              <div className="flex justify-between gap-4">
+                <span className="text-brand-muted">Guests</span>
+                <span className="font-semibold">{guests}</span>
+              </div>
+
+              <div className="flex justify-between gap-4">
+                <span className="text-brand-muted">Nights</span>
+                <span className="font-semibold">{nights}</span>
+              </div>
+            </div>
+
+            <div className="mt-6 border-t border-brand-blue/20 pt-5">
+              <p className="text-sm text-brand-muted">
+                Estimated room total
+              </p>
+
+              <p className="mt-1 text-3xl font-bold text-brand-deepBlue">
+                ₦{booking.total.toLocaleString("en-NG")}
+              </p>
+
+              <p className="mt-2 text-xs leading-5 text-brand-muted">
+                Weekday rates apply Monday to Thursday. Weekend rates
+                apply Friday to Sunday. The estimate covers room charges
+                only and is subject to availability and hotel confirmation.
+              </p>
+            </div>
+          </aside>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -1,173 +1,250 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import Logo from "../../assets/images/nexus-logo.png";
+import WhiteLogo from "../../assets/images/nexus-logo-white.png";
 import Hamburger from "../Icons/Hamburger";
 import NavClose from "../Icons/NavClose";
-import Logo from "../../assets/images/logo.jpg";
-import email from "../../assets/images/email.png";
-import phone from "../../assets/images/phone.png";
 
 export const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/about-us", label: "About Us" },
-  { href: "/accommodation/standard_room", label: "Accommodation" },
-  { href: "/contact-us", label: "Contact Us" },
+  { href: "/about-us", label: "About" },
+  { href: "/accommodation", label: "Accommodation" },
+  { href: "/contact-us", label: "Contact" },
 ];
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isFixedNav, setFixedNav] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 221.41) {
-      setFixedNav(true);
-    } else {
-      setFixedNav(false);
-    }
-  });
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 80);
+    };
 
-  const fixedNavLinks = navLinks.toSpliced(2, 0, {
-    href: "/",
-    label: <img src={Logo} alt="nexus hotel" width={50} height={20} />,
-  });
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
-    <>
-      <div className="bg-[#ffffff] text-black">
-        <div className="z-10 w-full max-w-[1990px] px-4 sm:px-10 lg:px-[48px] m-auto">
-          <div className="text-sm grid grid-cols-2 lg:grid-cols-3 justify-between items-center py-5">
-            <div className="flex flex-col gap-1.5">
-              <p>Nexus Xpress Hotel,</p>
-              <p> 9, Okada Bridge Road, FHA, Lugbe, Abuja</p>
-            </div>
+    <header className="relative z-50">
 
-            <NavLink to="/" className="hidden lg:flex justify-center">
-              <img src={Logo} alt="nexus hotel" width={100} height={40} />
-            </NavLink>
-            <div className="flex flex-col justify-center items-end gap-1.5">
-              <a
-                href="tel:+234 806 779 2621"
-                className=""
-                target="_blank" rel="noopener noreferrer"
-              >
-                  {/* <img src={phone} width="15" height="15" /> */}
-                <span>+234 806 779 2621</span>
-              </a>
-              <a
-                href="mailto:nexusxpresshotel@gmail.com"
-                target="_blank" rel="noopener noreferrer"
-                className=""
-              >
-                {/* <img src={email} width="15" height="15" /> */}
-                <span className="hidden lg:inline">nexusxpresshotel@gmail.com</span>
-                <span className="inline lg:hidden">Send us a mail</span>
-              </a>
-            </div>
-          </div>
-          <div className="text-sm bg-white z-30 h-[40px] w-full">
-            <nav className="flex justify-center items-center">
-              <ul className="max-w-[600px] flex-1 flex justify-between items-center max-lg:hidden font-semibold">
-                {navLinks.map((item) => (
-                  <li key={item.label}>
-                    <NavLink
-                      className={({ isActive }) =>
-                        isActive
-                          ? "flex justify-center p-2 text-primary-blue"
-                          : "flex justify-center p-2 text-[#000000]"
-                      }
-                      to={item.href}
-                    >
-                      {item.label}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
+      {/* Top information bar */}
+      <div className="hidden border-b border-brand-lightBlue bg-brand-lightBlue lg:block">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2.5 text-sm text-brand-muted">
 
-              <div
-                className="hidden max-lg:block cursor-pointer"
-                onClick={() => {
-                  setIsMenuOpen(!isMenuOpen);
-                }}
-              >
-                <Hamburger />
-              </div>
-            </nav>
-          </div>
-        </div>
-        {isMenuOpen && (
-          <div>
-            <nav className="z-40 bg-white fixed top-0 right-0 left-0 bottom-0 lg:bottom-auto">
-              <div
-                className="hidden max-lg:block fixed right-0 px-8 py-4 cursor-pointer"
-                onClick={() => {
-                  setIsMenuOpen(!isMenuOpen);
-                }}
-              >
-                <NavClose />
-              </div>
-              <ul className="lg:hidden flex flex-col gap-6 items-center justify-center h-full">
-                {navLinks.map((item) => (
-              <li key={item.label} onClick={() => setIsMenuOpen(false)}>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive
-                    ? "flex justify-center p-2 text-primary-blue"
-                    : "flex justify-center p-2 text-black"
-                }
-                to={item.href}
-              >
-                {item.label}
-              </NavLink>
-            </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-        )}
-      </div>
-      <div
-        className={`${
-          isFixedNav ? "fixed" : "hidden"
-        } bg-nav_bg top-0 w-full`}
-      >
+          Plot 454, Cadastral Zone 07-07, Okada Bridge Road, Phase 1, F.H.A, Lugbe, Abuja, Nigeria.
 
-        <nav className="flex justify-center items-center">
-          <ul className="m-auto grid grid-cols-5 justify-between justify-items-center items-center max-lg:hidden font-semibold">
-          {/* <div className="grid grid-cols-2 justify-between gap-4"><li>Home</li><li>About Us</li></div> <li><img src={Logo} alt="nexus hotel" width={50} height={20} /></li> <div className="grid grid-cols-2 justify-between gap-4"><li>Accomodation</li><li>Contact Us</li></div> */}
-          
-            {fixedNavLinks.map((item, index) => (
-              <li key={item.label}>
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive
-                      ? "flex justify-center p-2 text-[#F3E5AB]"
-                      : "flex justify-center p-2 text-white"
-                  }
-                  to={item.href}
-                >
-                  {item.label}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-
-          <div className="max-lg:flex md:hidden w-full justify-between bg-white px-2.5">
-            <div>
-              <img src={Logo} alt="nexus hotel" width={60} height={20} />
-            </div>
-            <button
-              className="cursor-pointer"
-              onClick={() => {
-                setIsMenuOpen(!isMenuOpen);
-              }}
+          <div className="flex items-center gap-8">
+            <a
+              href="tel:+2348067792621"
+              className="transition-colors hover:text-brand-blue"
             >
-              {" "}
-              <Hamburger color="#1F5EF5"/>
+              +234 806 779 2621
+            </a>
+
+            <a
+              href="mailto:nexusxpresshotel@gmail.com"
+              className="transition-colors hover:text-brand-blue"
+            >
+              nexusxpresshotel@gmail.com
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Main navigation */}
+      <div
+        className={`transition-all duration-300 ${
+          isScrolled
+            ? "fixed left-0 right-0 top-0 bg-brand-deepBlue shadow-lg"
+            : "bg-white"
+        }`}
+      >
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+
+          <div className="flex h-[60px] items-center justify-between">
+
+            {/* Mobile logo */}
+            <NavLink
+              to="/"
+              className="flex items-center lg:hidden"
+            >
+              <img
+                src={Logo}
+                alt="Nexus Xpress Hotel"
+                className="h-12 w-auto object-contain"
+              />
+            </NavLink>
+
+            {/* Desktop navigation */}
+            <nav className="hidden w-full items-center justify-center lg:flex">
+
+              <div className="flex items-center gap-6">
+
+                {/* Left navigation links */}
+                {navLinks.slice(0, 2).map((item) => (
+                  <NavLink
+                    key={item.href}
+                    to={item.href}
+                    className={({ isActive }) =>
+                      `text-base font-semibold tracking-wide transition-colors ${
+                        isActive
+                          ? isScrolled
+                            ? "text-brand-coral"
+                            : "text-brand-blue"
+                          : isScrolled
+                            ? "text-white hover:text-brand-coral"
+                            : "text-brand-deepBlue hover:text-brand-blue"
+                      }`
+                    }
+                  >
+                    {item.label}
+                  </NavLink>
+                ))}
+
+                {/* Centre logo */}
+                <NavLink
+                  to="/"
+                  className="mx-4 flex h-[60px] items-center"
+                >
+                  <img
+                    src={isScrolled ? WhiteLogo : Logo}
+                    alt="Nexus Xpress Hotel"
+                    className="h-14 w-auto object-contain"
+                  />
+                </NavLink>
+
+                {/* Right navigation links */}
+                {navLinks.slice(2).map((item) => (
+                  <NavLink
+                    key={item.href}
+                    to={item.href}
+                    className={({ isActive }) =>
+                      `text-base font-semibold tracking-wide transition-colors ${
+                        isActive
+                          ? isScrolled
+                            ? "text-brand-coral"
+                            : "text-brand-blue"
+                          : isScrolled
+                            ? "text-white hover:text-brand-coral"
+                            : "text-brand-deepBlue hover:text-brand-blue"
+                      }`
+                    }
+                  >
+                    {item.label}
+                  </NavLink>
+                ))}
+
+                {/* Book Now */}
+                <NavLink
+                  to="/reservation"
+                  className={`ml-1 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white transition-colors ${
+                    isScrolled
+                      ? "bg-brand-blue hover:bg-brand-purple"
+                      : "bg-brand-blue hover:bg-brand-deepBlue"
+                  }`}
+                >
+                  Book Now
+                </NavLink>
+
+              </div>
+            </nav>
+
+            {/* Mobile menu button */}
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(true)}
+              className="flex h-10 w-10 items-center justify-center lg:hidden"
+              aria-label="Open navigation menu"
+            >
+              <Hamburger
+                color={isScrolled ? "#FFFFFF" : "#0E2575"}
+              />
             </button>
 
-            {/* <RxHamburgerMenu className="text-4xl" /> */}
           </div>
-        </nav>
+        </div>
       </div>
-    </>
+
+      {/* Mobile menu */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 z-[100] bg-brand-deepBlue">
+
+          {/* Mobile menu header */}
+          <div className="flex h-20 items-center justify-between px-6">
+
+            <NavLink
+              to="/"
+              onClick={closeMenu}
+              className="flex items-center"
+            >
+              <img
+                src={WhiteLogo}
+                alt="Nexus Xpress Hotel"
+                className="h-12 w-auto object-contain"
+              />
+            </NavLink>
+
+            <button
+              type="button"
+              onClick={closeMenu}
+              className="flex h-10 w-10 items-center justify-center"
+              aria-label="Close navigation menu"
+            >
+              <NavClose />
+            </button>
+
+          </div>
+
+          {/* Mobile navigation */}
+          <nav className="flex min-h-[calc(100vh-80px)] items-center justify-center px-6">
+
+            <ul className="flex w-full max-w-sm flex-col items-center gap-7">
+
+              {navLinks.map((item) => (
+                <li key={item.href}>
+                  <NavLink
+                    to={item.href}
+                    onClick={closeMenu}
+                    className={({ isActive }) =>
+                      `text-xl font-semibold tracking-wide transition-colors ${
+                        isActive
+                          ? "text-brand-coral"
+                          : "text-white hover:text-brand-coral"
+                      }`
+                    }
+                  >
+                    {item.label}
+                  </NavLink>
+                </li>
+              ))}
+
+              <li className="pt-3">
+                <NavLink
+                  to="/reservation"
+                  onClick={closeMenu}
+                  className="inline-flex bg-brand-blue px-9 py-4 text-sm font-bold uppercase tracking-widest text-white transition-colors hover:bg-brand-purple"
+                >
+                  Book Now
+                </NavLink>
+              </li>
+
+            </ul>
+
+          </nav>
+        </div>
+      )}
+
+    </header>
   );
 };
+
 export default Navbar;

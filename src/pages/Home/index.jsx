@@ -1,23 +1,26 @@
-import { useEffect } from "react"
-import Accomodation from "./Accomodation"
-import Dining from "./Dining"
-import HeroSection from "./HeroSection"
-import SpecialOffers from "./SpecialOffers"
-import Welcome from "./Welcome"
+import { useEffect } from "react";
+import Accomodation from "./Accomodation";
+import HeroSection from "./HeroSection";
+import Welcome from "./Welcome";
+import WhyStay from "./WhyStay";
+import BushBar from "./BushBar";
+import FinalCTA from "./FinalCTA";
 
-const AboutUs = () =>{
-    useEffect(()=>{
-        window.scroll(0, 0)
-    }, [])
-    return(
-        <div>
-            <HeroSection />
-            <Welcome />
-            <SpecialOffers />
-            <Accomodation />
-            <Dining />
-        </div>
-    )
-}
+const Home = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-export default AboutUs
+  return (
+    <div>
+      <HeroSection />
+      <Welcome />
+      <Accomodation />
+      <WhyStay />
+      <BushBar />
+      <FinalCTA />
+    </div>
+  );
+};
+
+export default Home;

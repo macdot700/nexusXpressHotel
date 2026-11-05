@@ -1,33 +1,60 @@
+
 import Container from "../../components/Container";
-import welcomeImg from "../../assets/images/welcome.jpg";
-import arrow from "../../assets/images/arrow.jpeg";
+import welcomeImg from "../../assets/images/reception.png";
 
 const Welcome = () => {
   return (
-    <div className="w-full">
-      <Container className="py-[50px]">
-        <h2 className="text-2xl md:text-[2rem] font-bold mb-4 font-lato text-center">About Us</h2>
+    <section className="bg-white pt-10 pb-6 md:pt-14 md:pb-8 lg:pt-16 lg:pb-10">
+      <Container>
+        <div className="grid items-stretch gap-10 lg:grid-cols-2 lg:gap-16">
 
-        <p className="text-lg ">
-          Nexus Xpress Hotel is conveniently located in a safe and secured
-          environment at Federal Housing Authority (FHA) Lugbe, Abuja. It has a
-          close proximity to the Nnamdi Azikiwe International Airport (25
-          minutes drive) and 15 minutes drive to the city center. Our purpose is
-          to redefine hospitality in Lugbe and its environs by offering an
-          affordable and seamless blend of contemporary luxury and “warmth”
-          mirroring home. With an array of 26 beautifully furnished rooms with
-          facilities to make your stay comfortable we offer impeccable services
-          to our guests such as 24/7 electricity, laundry
-          services, 24/7 restaurant with tasteful homemade meals, bush bar and
-          in-house car hire services. Our dedicated staff is always ready to
-          make your stay a most memorable one as they are trained to assist our
-          guests with special needs as much as possible while respecting our
-          guests privacy. At our hotel we are driven by a purpose to redefine
-          hospitality with commitment to excellent service and top notch
-          customer satisfaction.
-        </p>
+          {/* Image */}
+          <div className="overflow-hidden">
+            <img
+              src={welcomeImg}
+              alt="Nexus Xpress Hotel"
+              className="h-[380px] w-full object-cover sm:h-[440px] lg:h-full lg:min-h-[520px]"
+            />
+          </div>
+
+          {/* Content */}
+          <div className="flex flex-col justify-center">
+
+            <p className="mb-4 inline-block w-fit bg-brand-lightBlue px-3 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-brand-blue md:text-sm">
+              Our Story
+            </p>
+
+            <h2 className="font-display text-4xl font-semibold leading-tight text-brand-deepBlue sm:text-5xl md:text-6xl">
+              Hospitality That Feels Like Home
+            </h2>
+
+            <p className="mt-6 text-base leading-8 text-brand-muted md:text-lg">
+              Since opening in February 2024, Nexus Xpress Hotel has welcomed
+              guests looking for a comfortable place to stay in Abuja. Whether
+              you're visiting for business, travelling with family or simply
+              passing through the city, we want you to feel at home from the
+              moment you arrive.
+            </p>
+
+            <p className="mt-5 text-base leading-8 text-brand-muted md:text-lg">
+              One of the things that makes our location special is our
+              proximity to the Airport Expressway. Situated in Lugbe, Abuja,
+              just by the expressway, the hotel offers convenient access to
+              the airport and major routes into the city.
+            </p>
+
+            <p className="mt-5 text-base leading-8 text-brand-muted md:text-lg">
+              We believe a good hotel stay is about more than having a room
+              to sleep in. It's also about being welcomed, receiving good
+              service and having a comfortable place to return to at the end
+              of the day. This is what we strive to offer every guest at
+              Nexus Xpress Hotel.
+            </p>
+
+          </div>
+        </div>
       </Container>
-    </div>
+    </section>
   );
 };
 
