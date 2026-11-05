@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import Container from "../../components/Container";
+import welcomeImg from "../../assets/images/reception.png";
 
 const Welcome = () => {
   return (
@@ -10,7 +11,7 @@ const Welcome = () => {
           {/* Image */}
           <div className="overflow-hidden">
             <img
-              src="/src/assets/images/welcome.jpg"
+              src={welcomeImg}
               alt="Welcome to Nexus Xpress Hotel"
               className="h-[340px] w-full object-cover sm:h-[380px] lg:h-full lg:min-h-[500px]"
             />
